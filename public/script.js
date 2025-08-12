@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = event.target
     const formData = new FormData(form)
     const data = Object.fromEntries(formData.entries())
+    console.log(data);
     const messageElement = document.getElementById(successMessageElementId)
 
     messageElement.textContent = "Processing..."
