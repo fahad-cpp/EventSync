@@ -2,8 +2,14 @@ const express = require("express")
 const path = require("path")
 const mysql = require('mysql2');
 const app = express()
-const PORT = process.env.PORT || 3000
 require('dotenv').config();
+
+const PORT = process.env.PORT || 3000
+const userState = {
+  loggedin:false,
+  email:null,
+  password:null
+};
 // Middleware to parse JSON and URL-encoded data
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -30,12 +36,28 @@ app.post("/api/auth/login", (req, res) => {
   console.log("Login attempt:", req.body)
   let email = req.body.email;
   let password = req.body.password;
-  let emails
-  if (req.body.email === "user@example.com" && req.body.password === "password") {
-    res.json({ success: true, message: "Login successful!" })
-  } else {
-    res.status(401).json({ success: false, message: "Invalid credentials." })
-  }
+  let emailquery = "select * from users where email = '"+email+"';";
+  let userquery = "select * from users where email = '"+email+"' AND password_hash = '"+password+"';";
+  con.query(emailquery,function(err,qres){
+    if(err){
+      console.error(error);
+      return res.json({success:false,message:"Database error while email query"});
+    }
+    if(qres.length == 0){
+      return res.json({success:false,message:"Email is not registered"});
+    }
+    con.query(userquery,function(uerr,uqres){
+      if(uerr){
+        console.error(uerr);
+        return res.json({success:false,message:"Database error while user query"});
+      }
+      if(uqres.length < 1){
+        return res.json({success:false,message:"Incorrect password"});
+      }
+      userState = {loggedin:true,email:email,password:password};
+      return res.json({success:true,message:"Login successful"});
+    });
+  })
 })
 
 app.post("/api/auth/register", (req, res) => {
