@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Event - Event Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav id="nav-placeholder"></nav>
+    </header>
+    <main class="container">
+        <h1>Join an Event</h1>
+        <form id="joinEventForm" class="form-card">
+            <div class="form-group">
+                <label for="eventCode">Event Code:</label>
+                <input type="text" id="eventCode" name="eventCode" placeholder="Enter event code or ID" required>
+            </div>
+            <button type="submit" class="button primary">Join Event</button>
+            <p id="joinEventMessage" class="message"></p>
+        </form>
+        <section class="event-list">
+            <h2>Browse Public Events</h2>
+            <p>Here you would see a list of public events. (Not implemented in this basic example)</p>
+            <!-- Example of a static event card -->
+            <div class="event-card">
+                <h3>Community Meetup</h3>
+                <p>Date: October 26, 2025</p>
+                <p>Location: Central Park</p>
+                <a href="event-details.html?id=123" class="button secondary">View Details</a>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 EventSync. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

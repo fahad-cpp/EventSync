@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication - Event Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav id="nav-placeholder"></nav>
+    </header>
+    <main class="container">
+        <h1>Login or Register</h1>
+        <div class="form-container">
+            <form id="loginForm" class="form-card">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                </div>
+                <button type="submit" class="button primary">Login</button>
+                <p id="loginMessage" class="message"></p>
+            </form>
+
+            <form id="registerForm" class="form-card">
+                <h2>Register</h2>
+                <div class="form-group">
+                    <label for="registerEmail">Email:</label>
+                    <input type="email" id="registerEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password:</label>
+                    <input type="password" id="registerPassword" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <button type="submit" class="button primary">Register</button>
+                <p id="registerMessage" class="message"></p>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 EventSync. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

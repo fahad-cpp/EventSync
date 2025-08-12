@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event - Event Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav id="nav-placeholder"></nav>
+    </header>
+    <main class="container">
+        <h1>Create a New Event</h1>
+        <form id="createEventForm" class="form-card">
+            <div class="form-group">
+                <label for="eventName">Event Name:</label>
+                <input type="text" id="eventName" name="eventName" required>
+            </div>
+            <div class="form-group">
+                <label for="eventDate">Date:</label>
+                <input type="date" id="eventDate" name="eventDate" required>
+            </div>
+            <div class="form-group">
+                <label for="eventTime">Time:</label>
+                <input type="time" id="eventTime" name="eventTime" required>
+            </div>
+            <div class="form-group">
+                <label for="eventLocation">Location:</label>
+                <input type="text" id="eventLocation" name="eventLocation" required>
+            </div>
+            <div class="form-group">
+                <label for="eventDescription">Description:</label>
+                <textarea id="eventDescription" name="eventDescription" rows="5"></textarea>
+            </div>
+            <button type="submit" class="button primary">Create Event</button>
+            <p id="createEventMessage" class="message"></p>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2025 EventSync. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

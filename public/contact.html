@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Event Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav id="nav-placeholder"></nav>
+    </header>
+    <main class="container">
+        <h1>Contact Us</h1>
+        <form id="contactForm" class="form-card">
+            <div class="form-group">
+                <label for="contactName">Your Name:</label>
+                <input type="text" id="contactName" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="contactEmail">Your Email:</label>
+                <input type="email" id="contactEmail" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="contactMessage">Message:</label>
+                <textarea id="contactMessage" name="message" rows="7" required></textarea>
+            </div>
+            <button type="submit" class="button primary">Send Message</button>
+            <p id="contactMessageStatus" class="message"></p>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2025 EventSync. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
