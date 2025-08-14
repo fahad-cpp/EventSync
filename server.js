@@ -1,18 +1,19 @@
 const express = require("express")
 const path = require("path")
 const mysql = require('mysql2');
+const bcrypt = require('bcryptjs');
 const app = express()
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000
-const userState = {
+let userState = {
   loggedin:false,
-  email:null,
-  password:null
+  userid:null
 };
 // Middleware to parse JSON and URL-encoded data
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static(path.join(__dirname, "public")))
 let con = mysql.createConnection(
     {
       host: process.env.DB_HOST,
@@ -21,77 +22,105 @@ let con = mysql.createConnection(
       database: process.env.DB_NAME
     }
   );
-  con.connect(function(err){
-    if(err) throw err;
-    let sql = "SELECT * from users";
-    con.query(sql,function(err , result){
-      if(err) throw err;
-      console.log(result);
-    })
-  })
-
-app.use(express.static(path.join(__dirname, "public")))
-
-app.post("/api/auth/login", (req, res) => {
-  console.log("Login attempt:", req.body)
-  let email = req.body.email;
-  let password = req.body.password;
-  let emailquery = "select * from users where email = '"+email+"';";
-  let userquery = "select * from users where email = '"+email+"' AND password_hash = '"+password+"';";
-  con.query(emailquery,function(err,qres){
-    if(err){
-      console.error(error);
-      return res.json({success:false,message:"Database error while email query"});
-    }
-    if(qres.length == 0){
-      return res.json({success:false,message:"Email is not registered"});
-    }
-    con.query(userquery,function(uerr,uqres){
-      if(uerr){
-        console.error(uerr);
-        return res.json({success:false,message:"Database error while user query"});
-      }
-      if(uqres.length < 1){
-        return res.json({success:false,message:"Incorrect password"});
-      }
-      userState = {loggedin:true,email:email,password:password};
-      return res.json({success:true,message:"Login successful"});
-    });
-  })
+con.connect(function(err){
+  if(err) throw err;
 })
 
-app.post("/api/auth/register", (req, res) => {
-  console.log("Register attempt:", req.body)
-  let email = req.body.email;
-  let password = req.body.password;
-  let sql = "INSERT into users(email,password_hash) values('" + email +"','" + password +"');";
-  let emailquery = "Select * from users where email = '"+email+"';";
-  //email select query
-  let alreadyregistered = false;
-  con.query(emailquery,function(err,qres){
-    if(err){
-      console.error(err);
-      return res.json({success:false,message:"Database error during email check query"});
+
+app.post("/api/auth/login", async (req, res) => {
+  console.log("Login attempt:", req.body);
+
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.json({ success: false, message: "Email and password are required." });
     }
-    if(qres.length > 0){
-      return res.json({message:"Email is already registered.",success:false});
+
+    // Query for user by email only (safe placeholder)
+    const [rows] = await con.promise().query(
+      "SELECT user_id, email, password_hash FROM users WHERE email = ?",
+      [email]
+    );
+
+    if (rows.length === 0) {
+      return res.json({ success: false, message: "Email is not registered" });
     }
-    //insert query
-    con.query(sql,function(err,qres){
-      console.log("Insert query:");
-      if(err){
-        console.error(err);
-        return res.json({success:false,messsage:"Failed to insert user query into users table."});
-      }
-      console.log(qres);
-      return res.json({ success: true, message: "Registration successful!" })
-    });
-  });
-})
+
+    const user = rows[0];
+
+    // Compare entered password with stored hash
+    const passwordMatch = await bcrypt.compare(password, user.password_hash);
+
+    if (!passwordMatch) {
+      return res.json({ success: false, message: "Incorrect password" });
+    }
+
+    // Example of storing user session state — do NOT store raw password
+    userState = { loggedin: true, userid: user.user_id };
+
+    return res.json({ success: true, message: "Login successful" });
+
+  } catch (err) {
+    console.error("Error during login:", err);
+    return res.json({ success: false, message: "Server error during login" });
+  }
+});
+
+
+app.post("/api/auth/register", async (req, res) => {
+  console.log("Register attempt:", req.body);
+
+  try {
+    const { email, password } = req.body;
+
+    // Input validation
+    if (!email || !password) {
+      return res.json({ success: false, message: "Email and password are required." });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Check if email is already registered
+    const [rows] = await con.promise().query(
+      "SELECT user_id FROM users WHERE email = ?",
+      [email]
+    );
+
+    if (rows.length > 0) {
+      return res.json({ success: false, message: "Email is already registered." });
+    }
+
+    // Insert new user
+    const [result] = await con.promise().query(
+      "INSERT INTO users (email, password_hash) VALUES (?, ?)",
+      [email, hashedPassword]
+    );
+
+    console.log("Insert result:", result);
+    return res.json({ success: true, message: "Registration successful!" });
+
+  } catch (err) {
+    console.error("Error during registration:", err);
+    return res.json({ success: false, message: "Server error during registration." });
+  }
+});
+
 
 app.post("/api/events/create", (req, res) => {
+  if(!userState.loggedin){
+    return res.json({success:false,message:"User is not logged in!"});;
+  }
   console.log("Event creation request:", req.body)
-  // TODO: save the event to a database
+  const {eventName,eventDate,eventTime,eventLocation,eventDescription,eventType} = req.body;
+  console.log(eventName,eventDate,eventTime,eventLocation,eventDescription,eventType);
+  let isPublic = (eventType === "Public");
+  let sql = "INSERT INTO Events(organizer_id,title,description,location,date,time,is_public) values(?,?,?,?,?,?,?)";
+  con.query(sql,[userState.userid,eventName,eventDescription,eventLocation,eventDate,eventTime,(isPublic?1:0)], (err,res) => {
+    if(err)throw err;
+    console.log(res);
+  });
   res.json({ success: true, message: "Event created successfully!" })
 })
 

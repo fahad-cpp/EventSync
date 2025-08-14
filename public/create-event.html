@@ -33,6 +33,18 @@
                 <label for="eventDescription">Description:</label>
                 <textarea id="eventDescription" name="eventDescription" rows="5"></textarea>
             </div>
+            <div class="form-group">
+                <label for="eventType">Event Type</label>
+                <div class="toggle-switch">
+                    <input type="radio" id="public" name="eventType" value="Public" checked>
+                    <label for="public" class="switch-option">Public</label>
+
+                    <input type="radio" id="private" name="eventType" value="Private">
+                    <label for="private" class="switch-option">Private</label>
+
+                    <span class="slider"></span>
+                </div>
+            </div>
             <button type="submit" class="button primary">Create Event</button>
             <p id="createEventMessage" class="message"></p>
         </form>

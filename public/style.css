@@ -191,6 +191,62 @@ section {
   font-weight: 600;
   color: var(--text-color);
 }
+.toggle-switch {
+    position: relative;
+    display: inline-flex;
+    background: var(--border-color, #ccc);
+    border-radius: 70px;
+    padding: 5px;
+    width: 180px;
+    height: 50px;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.toggle-switch input[type="radio"] {
+    display: none;
+}
+
+.switch-option {
+    flex: 1;
+    text-align:center;
+    line-height: 30px;
+    z-index: 1;
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #666;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.slider {
+    position: absolute;
+    top: 7px;
+    left: 5px;
+    height: 35px;
+    width: calc(50% - 7px);
+    background: #4cafef;
+    border-radius: 25px;
+    transition: transform 0.3s ease;
+    z-index: 0;
+}
+
+/* When "Public" is checked */
+#public:checked ~ .slider {
+    transform: translateX(0);
+}
+#public:checked + label {
+    color: white;
+}
+
+/* When "Private" is checked */
+#private:checked ~ .slider {
+    transform: translateX(100%);
+}
+#private:checked + label {
+    color: white;
+}
 
 .form-group input[type="text"],
 .form-group input[type="email"],
