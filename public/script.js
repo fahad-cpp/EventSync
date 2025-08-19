@@ -141,24 +141,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Event Details Page - Basic dynamic content (example)
   // In a real app, you'd fetch details from the backend based on a URL parameter
-  const eventTitle = document.getElementById("eventTitle")
-  if (eventTitle) {
-    async () => {
+  async function loadEventDetails(){
+    const eventTitle = document.getElementById("eventTitle")
+    if (eventTitle) {
       const urlParams = new URLSearchParams(window.location.search)
       const eventId = urlParams.get("id")
       if (eventId) {
-        // This is a static example. In a real app, you'd fetch data:
-        // fetch(`/api/events/${eventId}`).then(res => res.json()).then(data => {
-        //     eventTitle.textContent = data.name;
-        //     document.getElementById('eventDetailDate').textContent = data.date;
-        //     // ... and so on
-        // });
+        const date = document.getElementById("eventDetailDate");
+        const time = document.getElementById("eventDetailTime");
+        const location = document.getElementById("eventDetailLocation");
+        const description = document.getElementById("eventDetailDescription");
         const response = await fetch(`/api/events/${eventId}`,{method:"POST"});
         const jsonResponse = await response.json();
-        const event = jsonResponse.event;
-        console.log(event);
-        eventTitle.textContent = `Event ID: ${eventId} Details`
+        const event = jsonResponse.event[0];
+        console.log("Event:",event);
+        eventTitle.textContent = event.title;
+        date.textContent = event.date;
+        time.textContent = event.time;
+        location.textContent = event.location;
+        description.textContent = event.description;
       }
     }
   }
+  loadEventDetails();
 })
