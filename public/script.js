@@ -6,7 +6,37 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("nav-placeholder").innerHTML = data;
   })
   .catch(err => console.error("Error loading navbar:", err));
-  
+   //Public events fetch
+  async function loadEvents(){
+    const response = await fetch("/api/events/public",{method:"POST"});
+    let jsonResponse = await response.json();
+    const events = jsonResponse.events;
+    const eventListContainer = document.getElementsByClassName("event-list");
+    console.log(eventListContainer);
+    for(i=0;i<eventListContainer.length;i++){
+      let container = eventListContainer[i];
+      container.innerHTML = "";
+      if(events.length == 0){
+        const div = document.createElement("div");
+        div.innerHTML = `
+        <h3>No Public Events.</h3>
+        `;
+        container.appendChild(div);
+      }
+      events.forEach(event => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+        <h3>${event.title}</h3>
+        <p>Date : ${event.date}</p>
+        <p>Location : ${event.location}</p>
+        <p>Description : ${event.description}</p>
+        <hr>
+        `;
+        container.appendChild(div);
+      });
+    }
+  }
+  loadEvents();
   // Helper function to handle form submissions
   async function handleFormSubmit(event, apiUrl, successMessageElementId, redirectUrl = null) {
     event.preventDefault()
@@ -50,6 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+
+ 
   // Authentication Forms
   const loginForm = document.getElementById("loginForm")
   if (loginForm) {

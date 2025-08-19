@@ -1,2 +1,2 @@
 start npm start
-start duckduckgo "http://localhost:3000"
+start chrome "http://localhost:3000"
