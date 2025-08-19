@@ -130,12 +130,19 @@ app.post("/api/events/join", (req, res) => {
   res.json({ success: true, message: "Successfully joined event!" })
 })
 app.post("/api/events/public",async (req, res) => {
-  console.log("Public events fetch:", req.body);
-  const [rows] = await con.promise().query("SELECT title,date,location,description from Events where is_public = 1");
+  const [rows] = await con.promise().query("SELECT event_id,title,date,location,description from Events where is_public = 1");
   const eventList = rows;
-  console.log(rows);
   res.json({success:true,message:"Successfully fetched public events",events:eventList})
 })
+app.post("/api/events/:id", async (req,res) => {
+  const eventId = req.params.id;
+  const bodyData = req.body;
+  console.log("Event id:",eventId);
+  console.log("Body:",bodyData);
+  const [event] = await con.promise().query("SELECT title,date,time,location,description from Events where event_id = ?",[eventId]);
+  res.json({success:true,message : "Successfully fetched event details",event:event});
+});
+
 app.post("/api/contact", (req, res) => {
   console.log("Contact form submission:", req.body)
   // TODO : send an email or save to a CRM

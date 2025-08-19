@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let jsonResponse = await response.json();
     const events = jsonResponse.events;
     const eventListContainer = document.getElementsByClassName("event-list");
-    console.log(eventListContainer);
     for(i=0;i<eventListContainer.length;i++){
       let container = eventListContainer[i];
       container.innerHTML = "";
@@ -25,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       events.forEach(event => {
         const div = document.createElement("div");
+        div.classList.add("event-card");
         div.innerHTML = `
         <h3>${event.title}</h3>
         <p>Date : ${event.date}</p>
@@ -32,7 +32,15 @@ document.addEventListener("DOMContentLoaded", () => {
         <p>Description : ${event.description}</p>
         <hr>
         `;
+        const button = document.createElement("button");
+        button.textContent = "View details"
+        button.onclick =  () => {
+          window.location.href = `/event-details.html?id=${event.event_id}`;
+          console.log("Button pressed ID:",event.event_id);
+        };
+        button.classList.add("button","primary");
         container.appendChild(div);
+        div.appendChild(button);
       });
     }
   }
@@ -135,16 +143,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // In a real app, you'd fetch details from the backend based on a URL parameter
   const eventTitle = document.getElementById("eventTitle")
   if (eventTitle) {
-    const urlParams = new URLSearchParams(window.location.search)
-    const eventId = urlParams.get("id")
-    if (eventId) {
-      // This is a static example. In a real app, you'd fetch data:
-      // fetch(`/api/events/${eventId}`).then(res => res.json()).then(data => {
-      //     eventTitle.textContent = data.name;
-      //     document.getElementById('eventDetailDate').textContent = data.date;
-      //     // ... and so on
-      // });
-      eventTitle.textContent = `Event ID: ${eventId} Details`
+    async () => {
+      const urlParams = new URLSearchParams(window.location.search)
+      const eventId = urlParams.get("id")
+      if (eventId) {
+        // This is a static example. In a real app, you'd fetch data:
+        // fetch(`/api/events/${eventId}`).then(res => res.json()).then(data => {
+        //     eventTitle.textContent = data.name;
+        //     document.getElementById('eventDetailDate').textContent = data.date;
+        //     // ... and so on
+        // });
+        const response = await fetch(`/api/events/${eventId}`,{method:"POST"});
+        const jsonResponse = await response.json();
+        const event = jsonResponse.event;
+        console.log(event);
+        eventTitle.textContent = `Event ID: ${eventId} Details`
+      }
     }
   }
 })
