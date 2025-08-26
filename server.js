@@ -124,9 +124,11 @@ app.post("/api/events/create", (req, res) => {
   res.json({ success: true, message: "Event created successfully!" })
 })
 
-app.post("/api/events/join", (req, res) => {
+app.post("/api/events/join", async (req, res) => {
   console.log("Event joining request:", req.body)
-  // TODO: associate the user with the event
+  if(!userState.loggedin){
+    return res.json({success:false,message:"User is not logged in."});
+  }
   res.json({ success: true, message: "Successfully joined event!" })
 })
 app.post("/api/events/public",async (req, res) => {

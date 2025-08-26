@@ -7,6 +7,50 @@ document.addEventListener("DOMContentLoaded", () => {
   })
   .catch(err => console.error("Error loading navbar:", err));
    //Public events fetch
+  async function getEventDetails(){
+    const eventDate = document.getElementById("eventDetailDate").textContent;
+    const eventTime = document.getElementById("eventDetailTime").textContent;
+    const eventLocation = document.getElementById("eventDetailLocation").textContent;
+    const eventDescription = document.getElementById("eventDetailDescription").textContent;
+    const bodyobj = {
+      date:eventDate,
+      time:eventTime,
+      location:eventLocation,
+      description:eventDescription
+    }
+    return bodyobj;
+  }
+  async function setregbutton(){
+    const regButton = await document.getElementById("registerButton");
+
+    regButton.onclick = async () =>{
+      const bodyobj = await getEventDetails();
+      const messageElement = await document.getElementById("joinMessage");
+      console.log("Register button clicked");
+      try{
+        const response = await fetch("/api/events/join",{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify(bodyobj)
+        })
+        const result = await response.json();
+        if(result.success){
+          messageElement.textContent = result.message;
+          messageElement.classList.add("success");
+        }else{
+          messageElement.textContent = result.message;
+          messageElement.classList.add("error");
+        }
+      }catch(error){
+        console.error("Error:", error)
+        messageElement.textContent = "Network error. Please try again."
+        messageElement.classList.add("error")
+      }
+    }
+  }
+  setregbutton();
   async function loadEvents(){
     const response = await fetch("/api/events/public",{method:"POST"});
     let jsonResponse = await response.json();
@@ -34,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         const button = document.createElement("button");
         button.textContent = "View details"
-        button.onclick =  () => {
+        button.onclick = async () => {
           window.location.href = `/event-details.html?id=${event.event_id}`;
           console.log("Button pressed ID:",event.event_id);
         };
@@ -45,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   loadEvents();
+
   // Helper function to handle form submissions
   async function handleFormSubmit(event, apiUrl, successMessageElementId, redirectUrl = null) {
     event.preventDefault()
