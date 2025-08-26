@@ -143,9 +143,16 @@ app.post("/api/events/:id", async (req,res) => {
   res.json({success:true,message : "Successfully fetched event details",event:event});
 });
 
-app.post("/api/contact", (req, res) => {
+app.post("/api/contact", async (req, res) => {
   console.log("Contact form submission:", req.body)
-  // TODO : send an email or save to a CRM
+  if(!userState.loggedin){
+    return res.json({success:false,message:"User is not logged in"});
+  }
+  const name = req.body.name;
+  const email = req.body.email;
+  const msg = req.body.message;
+  let sql = "INSERT INTO ContactMessages(user_id,name,email,message) values(?,?,?,?)";
+  await con.promise().query(sql,[userState.userid,name,email,msg]);
   res.json({ success: true, message: "Message sent successfully!" })
 })
 
