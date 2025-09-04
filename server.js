@@ -23,10 +23,14 @@ let con = mysql.createConnection(
     }
   );
 con.connect(function(err){
-  if(err) throw err;
+  if(err){
+    console.log("Failed to connect database");
+  }
 })
 
-
+app.get("/admin", async (req,res) => {
+  res.sendFile(__dirname + "/public/admin.html");
+});
 app.post("/api/auth/login", async (req, res) => {
   console.log("Login attempt:", req.body);
 

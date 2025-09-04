@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   async function setregbutton(){
     const regButton = await document.getElementById("registerButton");
-
+    
     regButton.onclick = async () =>{
       const bodyobj = await getEventDetails();
       const messageElement = await document.getElementById("joinMessage");
