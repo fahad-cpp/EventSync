@@ -15,3 +15,7 @@ DB_NAME=EventSyncDB // replace woth your db name
 npm install
 npm start
 ```
+OR
+```batch
+startserver.bat
+```
