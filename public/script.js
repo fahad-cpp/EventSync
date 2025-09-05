@@ -89,14 +89,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   loadEvents();
-
+  
   // Helper function to handle form submissions
   async function handleFormSubmit(event, apiUrl, successMessageElementId, redirectUrl = null) {
     event.preventDefault()
     const form = event.target
     const formData = new FormData(form)
     const data = Object.fromEntries(formData.entries())
-    console.log(data);
+    //console.log(data);
     const messageElement = document.getElementById(successMessageElementId)
 
     messageElement.textContent = "Processing..."
@@ -134,7 +134,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
- 
+  const adminForm = document.getElementById("adminForm");
+  if(adminForm){
+    console.log("Admin form found")
+    adminForm.addEventListener("submit", (event) =>{
+      handleFormSubmit(event,"/api/admin/login","adminLoginMessage","feedbacks.html");
+    })
+  }
   // Authentication Forms
   const loginForm = document.getElementById("loginForm")
   if (loginForm) {

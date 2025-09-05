@@ -31,6 +31,17 @@ con.connect(function(err){
 app.get("/admin", async (req,res) => {
   res.sendFile(__dirname + "/public/admin.html");
 });
+app.post("/api/admin/login", async (req,res) =>{
+  console.log("Admin Login attempt:",req.body);
+  const username = req.body.adminUsername;
+  const password = req.body.adminPassword;
+
+  const [rows] = await con.promise().query("SELECT * FROM ADMINS where username = ? AND password_hash = ?;",[username,password]);
+  if(rows.length === 0){
+    return res.json({success:false,message:"Invalid Credentials"});
+  }
+  res.json({success:true,message:"Admin Login Successful"});
+})
 app.post("/api/auth/login", async (req, res) => {
   console.log("Login attempt:", req.body);
 

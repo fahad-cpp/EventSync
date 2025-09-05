@@ -4,22 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="logo.png">
     <title>Admin Panel</title>
 </head>
 <body>
+    <header>
+        <nav id="nav-placeholder"></nav>
+    </header>
     <div class="container">
-        <form class="form-card">
+        <form class="form-card" id="adminForm">
             <h2>Admin Login</h2>
             <div class="form-group">
                 <label for="adminUsername">Username:</label>
-                <input type="text" id="adminUsername" required>
+                <input type="text" id="adminUsername" name="adminUsername" required>
             </div>
             <div class="form-group">
                 <label for="adminPassword">Password:</label>
-                <input type="password" id="adminPassword" required>
+                <input type="password" id="adminPassword" name="adminPassword" required>
             </div>
             <button type="submit" class="button primary">Login</button>
         </form>
+        <p id="adminLoginMessage"></p>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
