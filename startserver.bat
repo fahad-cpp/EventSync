@@ -5,5 +5,5 @@ where chrome
 if %errorlevel% NEQ 0 (
 	start duckduckgo "http://localhost:3000"
 ) else (
-	start chrome ""http://localhost:3000"
+	start chrome "http://localhost:3000"
 )
