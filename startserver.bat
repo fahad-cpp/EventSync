@@ -1,9 +1,11 @@
 @echo off
-if not exist node_modules start npm install && timeout /t 5
-start npm start
-where chrome
-if %errorlevel% NEQ 0 (
-	start duckduckgo "http://localhost:3000"
-) else (
-	start chrome "http://localhost:3000"
+REM Install dependencies if node_modules doesn't exist
+if not exist node_modules (
+    echo Installing dependencies...
+    call npm install
+	timeout /t 10 /nobreak >nul
 )
+
+start "Server" npm start
+set "URL=http://localhost:3000"
+start "" "%URL%"
