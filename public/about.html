@@ -1,40 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About Us - EventSync</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="logo.png">
-</head>
-<body>
-    <header>
-        <nav id="nav-placeholder"></nav>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="index.html" class="nav-brand">
+            <span class="brand-icon">⚡</span>
+            <span class="brand-text">EventSync</span>
+          </a>
+          <!-- Added nav-links and updated nav-actions -->
+          <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+          </div>
+          <div class="nav-actions">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </nav>
     </header>
+
     <main class="container">
-        <h1>About EventSync</h1>
-        <section>
-            <h2>Our Mission</h2>
-            <p>At EventSync, our mission is to simplify event planning and participation. We believe that organizing memorable events should be accessible to everyone, and attending them should be effortless.</p>
-        </section>
-        <section>
-            <h2>Our Services</h2>
-            <ul>
-                <li><strong>Event Creation:</strong> Easily set up and customize your events with our intuitive tools.</li>
-                <li><strong>Event Discovery:</strong> Browse and find events that match your interests.</li>
-                <li><strong>Secure Joining:</strong> Join events with a simple click or by entering an event code.</li>
-                <li><strong>Attendee Management:</strong> Track registrations and communicate with your attendees.</li>
-                <li><strong>Real-time Updates:</strong> Keep participants informed with instant notifications.</li>
-            </ul>
-        </section>
-        <section>
-            <h2>Why Choose Us?</h2>
-            <p>We offer a user-friendly platform, robust features, and dedicated support to ensure your events are a success. Whether it's a small gathering or a large conference, EventSync has you covered.</p>
-        </section>
+      <h1>About EventSync</h1>
+      <section>
+        <h2>Our Mission</h2>
+        <p>
+          At EventSync, we simplify event planning and participation. We believe
+          organizing memorable events should be accessible to everyone.
+        </p>
+      </section>
+      <section>
+        <h2>Our Services</h2>
+        <ul>
+          <li>
+            <strong>Event Creation:</strong> Create and customize events with
+            our intuitive tools.
+          </li>
+          <li>
+            <strong>Event Discovery:</strong> Browse and find events matching
+            your interests.
+          </li>
+          <li>
+            <strong>Secure Joining:</strong> Join events with a simple click or
+            event code.
+          </li>
+          <li>
+            <strong>Attendee Management:</strong> Track registrations and
+            communicate with attendees.
+          </li>
+          <li>
+            <strong>Real-time Updates:</strong> Instant notifications for all
+            participants.
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h2>Why Choose Us?</h2>
+        <p>
+          We offer a user-friendly platform, robust features, and dedicated
+          support. Whether small gatherings or large conferences, EventSync has
+          you covered.
+        </p>
+      </section>
     </main>
-    <footer>
+
+    <footer class="footer">
+      <div class="footer-bottom">
         <p>&copy; 2025 EventSync. All rights reserved.</p>
+      </div>
     </footer>
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

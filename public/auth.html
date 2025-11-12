@@ -1,55 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Authentication - EventSync</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="logo.png">
-</head>
-<body>
-    <header>
-        <nav id="nav-placeholder"></nav>
-    </header>
-    <main class="container">
-        <h1>Login or Register</h1>
-        <div class="form-container">
-            <form id="loginForm" class="form-card">
-                <h2>Login</h2>
-                <div class="form-group">
-                    <label for="loginEmail">Email:</label>
-                    <input type="email" id="loginEmail" name="email" autocomplete="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password:</label>
-                    <input type="password" id="loginPassword" name="password" required>
-                </div>
-                <button type="submit" class="button primary">Login</button>
-                <p id="loginMessage" class="message"></p>
-            </form>
-
-            <form id="registerForm" class="form-card">
-                <h2>Register</h2>
-                <div class="form-group">
-                    <label for="registerEmail">Email:</label>
-                    <input type="email" id="registerEmail" name="email" autocomplete="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerPassword">Password:</label>
-                    <input type="password" id="registerPassword" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
-                </div>
-                <button type="submit" class="button primary">Register</button>
-                <p id="registerMessage" class="message"></p>
-            </form>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="index.html" class="nav-brand">
+            <span class="brand-icon">⚡</span>
+            <span class="brand-text">EventSync</span>
+          </a>
+          <div class="nav-actions">
+            <a href="index.html" class="btn btn-outline">Back Home</a>
+          </div>
         </div>
+      </nav>
+    </header>
+
+    <main class="container">
+      <div class="centered auth-container">
+        <!-- <h1>Authentication</h1> -->
+
+        <!-- Added toggle between login and register -->
+        <div class="toggle-switch auth-toggle">
+          <input
+            type="radio"
+            id="loginTab"
+            name="authTab"
+            value="login"
+            checked
+          />
+          <label for="loginTab" class="switch-option">Login</label>
+
+          <input
+            type="radio"
+            id="registerTab"
+            name="authTab"
+            value="register"
+          />
+          <label for="registerTab" class="switch-option">Register</label>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="form-card auth-form active">
+          <h2>Login</h2>
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input
+              type="email"
+              id="loginEmail"
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Enter password"
+              required
+            />
+          </div>
+          <button type="submit" class="button primary" style="width: 100%">
+            Login
+          </button>
+          <p id="loginMessage" class="message"></p>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="form-card auth-form">
+          <h2>Register</h2>
+          <!-- Added username field to register form -->
+          <div class="form-group">
+            <label for="registerUsername">Username</label>
+            <input
+              type="text"
+              id="registerUsername"
+              placeholder="Choose a username"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="registerEmail">Email</label>
+            <input
+              type="email"
+              id="registerEmail"
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="registerPassword">Password</label>
+            <input
+              type="password"
+              id="registerPassword"
+              placeholder="Create password"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm password"
+              required
+            />
+          </div>
+          <button type="submit" class="button primary" style="width: 100%">
+            Register
+          </button>
+          <p id="registerMessage" class="message"></p>
+        </form>
+      </div>
     </main>
-    <footer>
+
+    <footer class="footer">
+      <div class="footer-bottom">
         <p>&copy; 2025 EventSync. All rights reserved.</p>
+      </div>
     </footer>
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

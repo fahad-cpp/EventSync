@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - EventSync</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="dashboard.html" class="nav-brand">
+            <span class="brand-icon">⚡</span>
+            <span class="brand-text">EventSync</span>
+          </a>
+          <div class="nav-links">
+            <a href="dashboard.html" class="nav-link active">Dashboard</a>
+            <a href="create-event.html" class="nav-link">Create Event</a>
+            <a href="join-event.html" class="nav-link">Browse Events</a>
+          </div>
+          <div class="nav-actions">
+            <a href="profile.html" class="btn btn-secondary">Profile</a>
+            <button id="logoutBtn" class="btn btn-outline">Logout</button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        <!-- Dashboard Welcome Section -->
+        <section class="dashboard-hero">
+          <div class="dashboard-welcome">
+            <h1>Welcome back, <span id="dashboardUsername">User</span>!</h1>
+            <p>Manage your events and discover new experiences</p>
+          </div>
+          <div class="dashboard-quick-actions">
+            <a href="create-event.html" class="btn btn-primary btn-lg">
+              <span>+</span> Create Event
+            </a>
+            <a href="join-event.html" class="btn btn-primary btn-lg">
+              <span>🔍</span> Find Events
+            </a>
+            <a href="profile.html" class="btn btn-secondary btn-lg">
+              <span>⚙</span> Settings
+            </a>
+          </div>
+        </section>
+
+        <!-- Dashboard Stats -->
+        <section class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-content">
+              <h3>Events Created</h3>
+              <p id="createdCount" class="stat-number">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-content">
+              <h3>Events Joined</h3>
+              <p id="joinedCount" class="stat-number">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-content">
+              <h3>Upcoming Events</h3>
+              <p id="upcomingCount" class="stat-number">0</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Links to Features -->
+        <section class="dashboard-features">
+          <h2>Quick Navigation</h2>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">🎉</div>
+              <h3>Create Events</h3>
+              <p>Organize and host your own events</p>
+              <a href="create-event.html" class="btn btn-secondary"
+                >Get Started</a
+              >
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🔗</div>
+              <h3>Join Events</h3>
+              <p>Discover and join events near you</p>
+              <a href="join-event.html" class="btn btn-secondary"
+                >Browse Events</a
+              >
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">👤</div>
+              <h3>My Profile</h3>
+              <p>Manage your profile and preferences</p>
+              <a href="profile.html" class="btn btn-secondary">View Profile</a>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">💬</div>
+              <h3>Contact Us</h3>
+              <p>Get help and support from our team</p>
+              <a href="contact.html" class="btn btn-secondary"
+                >Contact Support</a
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent Events -->
+        <section class="dashboard-recent">
+          <h2>Your Recent Events</h2>
+          <div id="recentEventsList" class="event-list">
+            <p
+              style="
+                color: var(--text-secondary);
+                grid-column: 1/-1;
+                text-align: center;
+              "
+            >
+              Loading events...
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>EventSync</h4>
+          <p>Your event management platform.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="profile.html">My Profile</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Support</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 EventSync. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

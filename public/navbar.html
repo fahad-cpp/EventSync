@@ -1,11 +1,23 @@
-<link rel="stylesheet" href="style.css">
-<img class="logoimg" src="logo.png">
-<div class="logo">EventSync</div>
-<ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="about.html">About/Services</a></li>
-    <li><a href="create-event.html">Create Event</a></li>
-    <li><a href="join-event.html">Join Event</a></li>
-    <li><a href="contact.html">Contact Us</a></li>
-    <li><a href="auth.html">Login/Register</a></li>
-</ul>
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-logo">
+      <a href="index.html" class="logo-link">
+        <span class="logo-icon">✨</span>
+        <span class="logo-text">EventSync</span>
+      </a>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li>
+    </ul>
+    <div class="nav-auth">
+      <button
+        class="button primary-btn"
+        onclick="window.location.href='auth.html'"
+      >
+        Login / Register
+      </button>
+    </div>
+  </div>
+</nav>

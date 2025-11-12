@@ -1,25 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-UTF-8">
-    <link rel="icon" type="image/x-icon" href="logo.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thank You! - EventSync</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <nav id="nav-placeholder"></nav>
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="index.html" class="nav-brand">
+            <span class="brand-icon">⚡</span>
+            <span class="brand-text">EventSync</span>
+          </a>
+        </div>
+      </nav>
     </header>
+
     <main class="container">
-        <h1>Thank You!</h1>
-        <p>Your request has been successfully processed.</p>
-        <p>We appreciate your submission and will get back to you shortly, or your event/action is confirmed!</p>
-        <p class="centered"><a href="index.html" class="button primary">Go to Home Page</a></p>
+      <section
+        style="
+          text-align: center;
+          padding: var(--spacing-2xl) var(--spacing-lg);
+        "
+      >
+        <h1
+          style="
+            font-size: 2.8rem;
+            margin-bottom: var(--spacing-lg);
+            background: linear-gradient(
+              135deg,
+              var(--accent) 0%,
+              var(--accent-bright) 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          "
+        >
+          Thank You! 🎉
+        </h1>
+        <p
+          style="
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+          "
+        >
+          Your request has been successfully processed.
+        </p>
+        <p
+          style="
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xl);
+            line-height: 1.7;
+          "
+        >
+          We appreciate your submission and will get back to you shortly, or
+          your event/action is confirmed!
+        </p>
+        <a
+          href="index.html"
+          class="button primary"
+          style="display: inline-block"
+          >Go to Home</a
+        >
+      </section>
     </main>
-    <footer>
+
+    <footer class="footer">
+      <div class="footer-bottom">
         <p>&copy; 2025 EventSync. All rights reserved.</p>
+      </div>
     </footer>
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

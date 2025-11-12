@@ -1,31 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Event Details - EventSync</title>
-    <link rel="icon" type="image/x-icon" href="logo.png">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <nav id="nav-placeholder"></nav>
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="index.html" class="nav-brand">
+            <span class="brand-icon">⚡</span>
+            <span class="brand-text">EventSync</span>
+          </a>
+          <div class="nav-links">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="join-event.html" class="nav-link">Events</a>
+          </div>
+          <div class="nav-actions">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </nav>
     </header>
+
     <main class="container">
-        <h1 id="eventTitle">Event Title Placeholder</h1>
-        <section class="event-details-card">
-            <p><strong>Date:</strong> <span id="eventDetailDate">October 26, 2025</span></p>
-            <p><strong>Time:</strong> <span id="eventDetailTime">10:00 AM</span></p>
-            <p><strong>Location:</strong> <span id="eventDetailLocation">Central Park, New York</span></p>
-            <p><strong>Description:</strong> <span id="eventDetailDescription">This is a placeholder for the event description. In a real application, this content would be dynamically loaded based on the event ID from the URL.</span></p>
-            <button class="button primary" id="eventRegisterButton">Register for this Event</button>
-            <p id="joinMessage" class="message"></p>
-        </section>
-        <p><a href="join-event.html">Back to Join Event</a></p>
+      <h1 id="eventTitle">Event Details</h1>
+      <section class="event-details-card">
+        <!-- Added event type badge -->
+        <p>
+          <strong>📋 Event Type:</strong>
+          <span id="eventType" class="event-type-badge"></span>
+        </p>
+        <p><strong>📅 Date:</strong> <span id="eventDetailDate">TBA</span></p>
+        <p><strong>⏰ Time:</strong> <span id="eventDetailTime">TBA</span></p>
+        <p>
+          <strong>📍 Location:</strong>
+          <span id="eventDetailLocation">TBA</span>
+        </p>
+        <p><strong>📝 Description:</strong></p>
+        <p id="eventDetailDescription">Loading...</p>
+
+        <!-- Added private event code input section -->
+        <div
+          id="privateEventCodeSection"
+          style="
+            display: none;
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--border);
+          "
+        >
+          <h3
+            style="margin-bottom: var(--spacing-md); color: var(--text-primary)"
+          >
+            This is a Private Event
+          </h3>
+          <div class="form-group">
+            <label for="eventCodeInput">Event Code (Required to Join)</label>
+            <input
+              type="text"
+              id="eventCodeInput"
+              placeholder="Enter event code"
+              maxlength="50"
+            />
+          </div>
+          <p id="codeValidationMessage" class="message"></p>
+        </div>
+
+        <button
+          class="button primary"
+          id="eventRegisterButton"
+          style="margin-top: var(--spacing-lg)"
+        >
+          Register for Event
+        </button>
+        <p id="joinMessage" class="message"></p>
+      </section>
+      <p>
+        <a
+          href="join-event.html"
+          class="button secondary"
+          style="display: inline-block; margin-top: var(--spacing-lg)"
+          >Back to Events</a
+        >
+      </p>
     </main>
-    <footer>
+
+    <footer class="footer">
+      <div class="footer-bottom">
         <p>&copy; 2025 EventSync. All rights reserved.</p>
+      </div>
     </footer>
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

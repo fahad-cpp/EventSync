@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile - EventSync</title>
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="dashboard.html" class="nav-brand">
+            <span class="brand-icon">⚡</span>
+            <span class="brand-text">EventSync</span>
+          </a>
+          <!-- Updated navbar to match other authenticated pages -->
+          <div class="nav-links">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="create-event.html" class="nav-link">Create Event</a>
+            <a href="join-event.html" class="nav-link">Browse Events</a>
+          </div>
+          <div class="nav-actions1">
+            <!-- Logout button only appears on profile page -->
+            <button id="logoutBtn" class="btn btn-outline1">Logout</button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        <h1>My Profile</h1>
+
+        <div class="profile-header">
+          <div class="profile-avatar">👤</div>
+          <div class="profile-info">
+            <h2 id="profileUsername"></h2>
+            <p id="profileEmail"></p>
+            <p id="profileMemberSince"></p>
+          </div>
+        </div>
+
+        <div class="profile-tabs">
+          <button class="tab-btn active" data-tab="account">
+            Account Settings
+          </button>
+          <button class="tab-btn" data-tab="password">Change Password</button>
+          <button class="tab-btn" data-tab="created">My Events</button>
+          <button class="tab-btn" data-tab="registered">
+            Registered Events
+          </button>
+        </div>
+
+        <div class="tab-content active" id="account">
+          <div class="form-card">
+            <h2>Account Settings</h2>
+            <form id="updateProfileForm">
+              <div class="form-group">
+                <label for="updateUsername">Username</label>
+                <input type="text" id="updateUsername" required />
+              </div>
+              <div class="form-group">
+                <label for="updateEmail">Email Address</label>
+                <input type="email" id="updateEmail" required />
+              </div>
+              <div id="updateProfileMessage" class="message"></div>
+              <button type="submit" class="button primary">
+                Update Profile
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="tab-content" id="password">
+          <div class="form-card">
+            <h2>Change Password</h2>
+            <form id="changePasswordForm">
+              <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" required />
+              </div>
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" required />
+              </div>
+              <div class="form-group">
+                <label for="confirmNewPassword">Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" required />
+              </div>
+              <div id="changePasswordMessage" class="message"></div>
+              <button type="submit" class="button primary">
+                Change Password
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="tab-content" id="created">
+          <div class="form-card">
+            <h2>Events I've Created</h2>
+            <div id="createdEventsList" class="event-list">
+              <p style="color: var(--text-secondary); grid-column: 1/-1">
+                Loading your events...
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="registered">
+          <div class="form-card">
+            <h2>Events I'm Registered For</h2>
+            <div id="registeredEventsList" class="event-list">
+              <p style="color: var(--text-secondary); grid-column: 1/-1">
+                Loading your registrations...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>EventSync</h4>
+          <p>Your event management platform.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="profile.html">My Profile</a></li>
+            <li><a href="contact.html">Support</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 EventSync. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

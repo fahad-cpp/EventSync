@@ -1,31 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="logo.png">
-    <title>Admin Panel</title>
-</head>
-<body>
-    <header>
-        <nav id="nav-placeholder"></nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+    <title>Admin Panel - EventSync</title>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="index.html" class="nav-brand">
+            <span class="brand-icon">⚡</span>
+            <span class="brand-text">EventSync</span>
+          </a>
+          <div class="nav-actions">
+            <a href="index.html" class="btn btn-outline">Home</a>
+          </div>
+        </div>
+      </nav>
     </header>
-    <div class="container">
-        <form class="form-card" id="adminForm">
-            <h2>Admin Login</h2>
-            <div class="form-group">
-                <label for="adminUsername">Username:</label>
-                <input type="text" id="adminUsername" name="adminUsername" required>
-            </div>
-            <div class="form-group">
-                <label for="adminPassword">Password:</label>
-                <input type="password" id="adminPassword" name="adminPassword" required>
-            </div>
-            <button type="submit" class="button primary">Login</button>
-        </form>
-        <p id="adminLoginMessage"></p>
-    </div>
+
+    <main class="container">
+      <h1>Admin Panel</h1>
+      <form class="form-card centered" id="adminForm">
+        <h2>Admin Login</h2>
+        <div class="form-group">
+          <label for="adminUsername">Username</label>
+          <input
+            type="text"
+            id="adminUsername"
+            placeholder="Enter username"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input
+            type="password"
+            id="adminPassword"
+            placeholder="Enter password"
+            required
+          />
+        </div>
+        <button type="submit" class="button primary" style="width: 100%">
+          Login
+        </button>
+        <p id="adminLoginMessage" class="message"></p>
+      </form>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-bottom">
+        <p>&copy; 2025 EventSync. All rights reserved.</p>
+      </div>
+    </footer>
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

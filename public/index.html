@@ -1,30 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - EventSync</title>
-    <link rel="icon" type="image/x-icon" href="logo.png">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <nav id="nav-placeholder"></nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EventSync - Create & Manage Events</title>
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="index.html" class="nav-brand">
+            <span class="brand-icon">⚡</span>
+            <span class="brand-text">EventSync</span>
+          </a>
+          <div class="nav-links">
+            <a href="#features" class="nav-link">Features</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+          </div>
+          <div class="nav-actions">
+            <a href="auth.html" class="btn btn-outline">Sign In</a>
+            <a href="auth.html" class="btn btn-primary">Get Started</a>
+          </div>
+        </div>
+      </nav>
     </header>
-    <main class="container">
-        <h1>Welcome to EventSync!</h1>
-        <p>Your one-stop solution for creating, managing, and joining events.</p>
-        <section class="hero">
-            <p>Discover exciting events or create your own in minutes.</p>
-            <div class="hero-buttons">
-                <a href="create-event.html" class="button primary">Create an Event</a>
-                <a href="join-event.html" class="button secondary">Join an Event</a>
+
+    <main>
+      <section class="hero">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            Your events, <span class="highlight">elevated</span>
+          </h1>
+          <p class="hero-subtitle">
+            Create unforgettable experiences. Connect with your community.
+            Manage everything seamlessly.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="create-event.html" class="btn btn-primary btn-lg"
+              >Create Event</a
+            >
+            <a href="join-event.html" class="btn btn-secondary btn-lg"
+              >Discover Events</a
+            >
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-number">50K+</div>
+              <div class="stat-label">Events Created</div>
             </div>
-        </section>
+            <div class="stat">
+              <div class="stat-number">500K+</div>
+              <div class="stat-label">Attendees</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number">98%</div>
+              <div class="stat-label">Satisfaction</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="features">
+        <h2 class="section-title">Why Choose EventSync?</h2>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title">Easy Creation</h3>
+            <p class="feature-description">
+              Create events in minutes with our intuitive interface.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3 class="feature-title">Smart Sharing</h3>
+            <p class="feature-description">
+              Share events across platforms and reach your audience.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Analytics</h3>
+            <p class="feature-description">
+              Track attendance and engagement in real-time.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">💬</div>
+            <h3 class="feature-title">Community</h3>
+            <p class="feature-description">
+              Connect with fellow organizers and attendees.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta">
+        <div class="cta-content">
+          <h2 class="cta-title">Ready to create your first event?</h2>
+          <p class="cta-subtitle">
+            Join thousands of organizers who trust EventSync
+          </p>
+          <a href="create-event.html" class="btn btn-primary btn-lg"
+            >Start Creating</a
+          >
+        </div>
+      </section>
     </main>
-    <footer>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>EventSync</h4>
+          <p>Your event management platform.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="contact.html">Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">LinkedIn</a></li>
+            <li><a href="#">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
         <p>&copy; 2025 EventSync. All rights reserved.</p>
+      </div>
     </footer>
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

@@ -1,41 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join Event - EventSync</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="logo.png">
-</head>
-<body>
-    <header>
-        <nav id="nav-placeholder"></nav>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="dashboard.html" class="nav-brand">
+            <span class="brand-icon">⚡</span>
+            <span class="brand-text">EventSync</span>
+          </a>
+          <!-- Updated navbar to be consistent -->
+          <div class="nav-links">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="create-event.html" class="nav-link">Create Event</a>
+            <a href="join-event.html" class="nav-link active">Browse Events</a>
+          </div>
+          <div class="nav-actions">
+            <!-- User icon button populated by JS -->
+          </div>
+        </div>
+      </nav>
     </header>
+
     <main class="container">
-        <h1>Join an Event</h1>
-        <form id="joinEventForm" class="form-card centered">
-            <div class="form-group">
-                <label for="eventCode">Event Code:</label>
-                <input type="text" id="eventCode" name="eventCode" placeholder="Enter event code or ID" required>
-            </div>
-            <button type="submit" class="button primary">Join Event</button>
-            <p id="joinEventMessage" class="message"></p>
-        </form>
-        <h2>Browse Public Events</h2>
-        <section class="event-list">
-            <!-- Example of a static event card
-            <div class="event-card">
-                <h3>Community Meetup</h3>
-                <p>Date: October 26, 2025</p>
-                <p>Location: Central Park</p>
-                <a href="event-details.html?id=123" class="button secondary">View Details</a>
-            </div>
-            -->
-        </section>
+      <h1>Join an Event</h1>
+      <h2 style="margin-top: var(--spacing-xl); text-align: center">
+        Available Events
+      </h2>
+      <section class="event-list">
+        <!-- Events populated by JS -->
+      </section>
     </main>
-    <footer>
+
+    <footer class="footer">
+      <div class="footer-bottom">
         <p>&copy; 2025 EventSync. All rights reserved.</p>
+      </div>
     </footer>
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
