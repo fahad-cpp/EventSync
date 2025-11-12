@@ -206,21 +206,22 @@ async function handleLogin(e) {
 
 async function handleRegister(e) {
   e.preventDefault();
+  const username = document.getElementById("registerUsername").value.trim();
   const email = document.getElementById("registerEmail").value.trim();
   const password = document.getElementById("registerPassword").value.trim();
   const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
+  if (!username || !email || !password)
+    return showMessage("registerMessage", "All fields required.", "error");
+
   if (password !== confirmPassword)
     return showMessage("registerMessage", "Passwords do not match.", "error");
-
-  if (!email || !password)
-    return showMessage("registerMessage", "All fields required.", "error");
 
   try {
     const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, email, password }),
     });
     const data = await res.json();
 
@@ -230,10 +231,12 @@ async function handleRegister(e) {
     } else {
       showMessage("registerMessage", data.message, "error");
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     showMessage("registerMessage", "Server error. Try again later.", "error");
   }
 }
+
 
 // Handle admin login
 async function handleAdminLogin(e) {
@@ -271,36 +274,38 @@ function showMessage(elementId, message, type) {
 }
 
 // Store event registration
-async function registerEvent(eventId) {
+async function registerEvent(eventId, isPrivate = false) {
   const button = document.getElementById("eventRegisterButton");
-
   if (!button) return;
+
   button.addEventListener("click", async () => {
     console.log("Button Clicked");
     const joinMessageEl = document.getElementById("joinMessage");
 
     try {
-      // Handle private event code validation
       let eventCode = null;
-      const codeInput = document.getElementById("eventCodeInput");
-      if (codeInput) {
+
+      // Only check code if the event is private
+      if (isPrivate) {
+        const codeInput = document.getElementById("eventCodeInput");
+        if (!codeInput) {
+          showMessage("joinMessage", "Event code input not found.", "error");
+          return;
+        }
+
         eventCode = codeInput.value.trim();
         if (!eventCode) {
-          showMessage(
-            "joinMessage",
-            "Please enter the event code to join.",
-            "error"
-          );
+          showMessage("joinMessage", "Please enter the event code to join.", "error");
           return;
         }
       }
 
-      // Send join request to backend
-      console.log("Passing to Server")
+      console.log("Passing to Server");
+
       const response = await fetch("/api/events/join", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // important: sends cookies/session
+        credentials: "include",
         body: JSON.stringify({ eventId, code: eventCode }),
       });
 
@@ -320,6 +325,7 @@ async function registerEvent(eventId) {
     }
   });
 }
+
 
 
 // Load event details if on event details page
@@ -350,14 +356,30 @@ async function loadEventDetails() {
     }
 
 
-    registerEvent(eventId);
+    registerEvent(eventId,!event.is_public);
   } catch (err) {
     console.error(err);
     document.querySelector(".event-details-container").innerHTML = "<p style='color:red'>Failed to load event details.</p>";
   }
 }
 
+async function loadHeroStats() {
+  try {
+    const res = await fetch("/api/stats");
+    const data = await res.json();
 
+    if (!data.success) return;
+
+    // Update the DOM
+    const eventsCreatedEl = document.getElementById("eventsCreated");
+    const attendeesCountEl = document.getElementById("attendeesCount");
+
+    if(eventsCreatedEl)eventsCreatedEl.textContent = data.totalEvents;
+    if(attendeesCountEl)attendeesCountEl.textContent = data.totalAttendees;
+  } catch (err) {
+    console.error("Error loading hero stats:", err);
+  }
+}
 // Load profile information
 async function loadProfilePage() {
   try {
@@ -821,6 +843,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Call auth check on page load
 document.addEventListener("DOMContentLoaded", () => {
+  loadHeroStats();
   checkAuthentication();
   loadNavigation();
   attachFormListeners();
@@ -862,7 +885,7 @@ if (window.location.pathname.includes("auth.html")) {
 
 if (window.location.pathname.includes("event-details.html")) {
   document.addEventListener("DOMContentLoaded", () => {
-    checkAuthentication(); // optional, if page is protected
-    loadEventDetails();     // ✅ actually call the function
+    checkAuthentication();
+    loadEventDetails();
   });
 }
