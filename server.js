@@ -339,8 +339,8 @@ app.get("/api/stats", async (req, res) => {
 // 🧠 JOIN EVENT
 // ─────────────────────────────
 app.post("/api/events/join", async (req, res) => {
-  console.log("Join attempt :",eventId);
   const { eventId, code } = req.body;
+  console.log("Join attempt :",eventId);
   const user = req.session.user;
   if (!user) {
     return res.status(401).json({ success: false, message: "Not logged in." });

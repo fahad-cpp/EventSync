@@ -503,11 +503,11 @@ async function loadUserRegisteredEvents() {
       .map(
         (event) => `
         <div class="event-card">
-          <h3>${event.name}</h3>
+          <h3>${event.title}</h3>
           <p><strong>📅 Date:</strong> ${event.date.split("T")[0]}</p>
           <p><strong>⏰ Time:</strong> ${event.time}</p>
           <p><strong>📍 Location:</strong> ${event.location}</p>
-          <a href="event-details.html?id=${event.id}" class="button secondary" style="display: inline-block; margin-top: var(--spacing-md);">View Details</a>
+          <a href="event-details.html?id=${event.event_id}" class="button secondary" style="display: inline-block; margin-top: var(--spacing-md);">View Details</a>
         </div>
       `
       )
