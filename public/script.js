@@ -130,7 +130,7 @@ async function loadPublicEvents() {
               ${event.is_public ? "Public" : "Private"}
             </span>
           </div>
-          <p><strong>📅 Date:</strong> ${event.date}</p>
+          <p><strong>📅 Date:</strong> ${event.date.split("T")[0]}</p>
           <p><strong>⏰ Time:</strong> ${event.time}</p>
           <p><strong>📍 Location:</strong> ${event.location}</p>
         </div>
@@ -275,8 +275,8 @@ async function registerEvent(eventId) {
   const button = document.getElementById("eventRegisterButton");
 
   if (!button) return;
-
   button.addEventListener("click", async () => {
+    console.log("Button Clicked");
     const joinMessageEl = document.getElementById("joinMessage");
 
     try {
@@ -287,7 +287,7 @@ async function registerEvent(eventId) {
         eventCode = codeInput.value.trim();
         if (!eventCode) {
           showMessage(
-            "codeValidationMessage",
+            "joinMessage",
             "Please enter the event code to join.",
             "error"
           );
@@ -296,6 +296,7 @@ async function registerEvent(eventId) {
       }
 
       // Send join request to backend
+      console.log("Passing to Server")
       const response = await fetch("/api/events/join", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -339,7 +340,7 @@ async function loadEventDetails() {
     document.getElementById("eventTitle").textContent = event.title;
     document.getElementById("eventType").textContent = event.is_public ? "Public" : "Private";
     document.getElementById("eventType").className = `event-type-badge ${event.is_public ? "public" : "private"}`;
-    document.getElementById("eventDetailDate").textContent = event.date;
+    document.getElementById("eventDetailDate").textContent = event.date.split("T")[0];
     document.getElementById("eventDetailTime").textContent = event.time;
     document.getElementById("eventDetailLocation").textContent = event.location;
     document.getElementById("eventDetailDescription").textContent = event.description || "No description available";
@@ -434,17 +435,17 @@ async function loadUserCreatedEvents() {
       `;
       return;
     }
-
+    console.log(data);
     createdList.innerHTML = data.createdEvents
       .map(
         (event) => `
         <div class="event-card">
-          <h3>${event.name}</h3>
-          <p><strong>📅 Date:</strong> ${event.date}</p>
+          <h3>${event.title}</h3>
+          <p><strong>📅 Date:</strong> ${event.date.split("T")[0]}</p>
           <p><strong>⏰ Time:</strong> ${event.time}</p>
           <p><strong>📍 Location:</strong> ${event.location}</p>
           <p><strong>🏷️ Code:</strong> ${event.code}</p>
-          <a href="event-details.html?id=${event.id}" class="button secondary" style="display: inline-block; margin-top: var(--spacing-md);">View Details</a>
+          <a href="event-details.html?id=${event.event_id}" class="button secondary" style="display: inline-block; margin-top: var(--spacing-md);">View Details</a>
         </div>
       `
       )
@@ -481,7 +482,7 @@ async function loadUserRegisteredEvents() {
         (event) => `
         <div class="event-card">
           <h3>${event.name}</h3>
-          <p><strong>📅 Date:</strong> ${event.date}</p>
+          <p><strong>📅 Date:</strong> ${event.date.split("T")[0]}</p>
           <p><strong>⏰ Time:</strong> ${event.time}</p>
           <p><strong>📍 Location:</strong> ${event.location}</p>
           <a href="event-details.html?id=${event.id}" class="button secondary" style="display: inline-block; margin-top: var(--spacing-md);">View Details</a>
@@ -690,7 +691,7 @@ async function loadDashboard() {
         (event) => `
         <div class="event-card">
           <h3>${event.name}</h3>
-          <p><strong>📅 Date:</strong> ${event.date}</p>
+          <p><strong>📅 Date:</strong> ${event.date.split("T")[0]}</p>
           <p><strong>⏰ Time:</strong> ${event.time}</p>
           <p><strong>📍 Location:</strong> ${event.location}</p>
           <a href="event-details.html?id=${event.id}" class="button secondary" 

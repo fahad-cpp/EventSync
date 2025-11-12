@@ -233,9 +233,9 @@ app.post("/api/events/create", (req, res) => {
 // 🧠 JOIN EVENT
 // ─────────────────────────────
 app.post("/api/events/join", async (req, res) => {
+  console.log("Join attempt :",eventId);
   const { eventId, code } = req.body;
   const user = req.session.user;
-
   if (!user) {
     return res.status(401).json({ success: false, message: "Not logged in." });
   }
@@ -368,6 +368,45 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
+// ─────────────────────────────
+// 🧠 GET EVENT BY ID
+// ─────────────────────────────
+app.get("/api/events/:id", async (req, res) => {
+  const eventId = req.params.id;
+
+  try {
+    // Fetch event by ID
+    const [events] = await con
+      .promise()
+      .query("SELECT * FROM Events WHERE event_id = ?", [eventId]);
+
+    if (events.length === 0) {
+      return res.status(404).json({ success: false, message: "Event not found" });
+    }
+
+    const event = events[0];
+
+    // Fetch participants for this event
+    const [participants] = await con
+      .promise()
+      .query(
+        `SELECT u.user_id, u.email 
+         FROM EventParticipants p 
+         JOIN users u ON p.user_id = u.user_id 
+         WHERE p.event_id = ?`,
+        [eventId]
+      );
+
+    res.json({
+      success: true,
+      event,
+      participants,
+    });
+  } catch (err) {
+    console.error("Error fetching event:", err);
+    res.status(500).json({ success: false, message: "Server error fetching event." });
+  }
+});
 
 // ─────────────────────────────
 // 🧠 STATIC FRONTEND + FALLBACK
