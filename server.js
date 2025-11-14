@@ -57,17 +57,16 @@ app.post("/api/auth/register", async (req, res) => {
   console.log("Register attempt:", req.body);
 
   try {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
 
-    if (!email || !password) {
-      return res.json({ success: false, message: "Email and password are required." });
+    if (!username || !email || !password) {
+      return res.json({ success: false, message: "Username, email, and password are required." });
     }
 
     // Check if user already exists
-    const [existing] = await con.promise().query(
-      "SELECT user_id FROM users WHERE email = ?",
-      [email]
-    );
+    const [existing] = await con
+      .promise()
+      .query("SELECT user_id FROM users WHERE email = ?", [email]);
 
     if (existing.length > 0) {
       return res.json({ success: false, message: "Email is already registered." });
@@ -76,22 +75,25 @@ app.post("/api/auth/register", async (req, res) => {
     // Hash password securely
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Insert user
+    // Insert user including username
     const [result] = await con
       .promise()
-      .query("INSERT INTO users (email, password_hash) VALUES (?, ?)", [
-        email,
-        hashedPassword,
-      ]);
+      .query(
+        "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
+        [username, email, hashedPassword]
+      );
 
     console.log("User registered:", result.insertId);
 
     res.json({ success: true, message: "Registration successful!" });
   } catch (err) {
     console.error("Error during registration:", err);
-    res.status(500).json({ success: false, message: "Server error during registration." });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error during registration." });
   }
 });
+
 
 // ─────────────────────────────
 // 🧠 AUTH: LOGIN
@@ -190,14 +192,95 @@ app.post("/api/admin/login", (req, res) => {
 // ─────────────────────────────
 // 🧠 USER PROFILE
 // ─────────────────────────────
-app.get("/api/user/profile", (req, res) => {
-  if (!req.session.user)
-    return res.status(401).json({ success: false, message: "Not logged in" });
+app.get("/api/user/profile", async (req, res) => {
+  const user = req.session.user;
 
-  res.json({
-    success: true,
-    user: req.session.user,
-  });
+  if (!user) {
+    return res.status(401).json({ success: false, message: "Not logged in" });
+  }
+
+  try {
+    const [rows] = await con
+      .promise()
+      .query(
+        "SELECT user_id, username, email, created_at, updated_at FROM users WHERE user_id = ?",
+        [user.id]
+      );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const fullUser = rows[0];
+
+    res.json({
+      success: true,
+      user: {
+        id: fullUser.user_id,
+        username: fullUser.username,
+        email: fullUser.email,
+        createdAt: fullUser.created_at,
+        updatedAt: fullUser.updated_at,
+      },
+    });
+  } catch (err) {
+    console.error("Error fetching profile:", err);
+    res.status(500).json({ success: false, message: "Server error." });
+  }
+});
+
+// ─────────────────────────────
+// 🧠 UPDATE USER PROFILE
+// ─────────────────────────────
+app.put("/api/user/update-profile", async (req, res) => {
+  const user = req.session.user;
+
+  if (!user) {
+    return res.status(401).json({ success: false, message: "Not logged in." });
+  }
+
+  const { email, username } = req.body;
+
+  if (!email || !username) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Email and username cannot be empty." });
+  }
+
+  try {
+    // Check if email is already used by another user
+    const [existing] = await con
+      .promise()
+      .query(
+        "SELECT user_id FROM users WHERE email = ? AND user_id != ?",
+        [email, user.id]
+      );
+
+    if (existing.length > 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is already in use." });
+    }
+
+    // Update user in database
+    await con
+      .promise()
+      .query(
+        "UPDATE users SET email = ?, username = ? WHERE user_id = ?",
+        [email, username, user.id]
+      );
+
+    // Update session with new values
+    req.session.user.email = email;
+    req.session.user.username = username;
+
+    res.json({ success: true, message: "Profile updated successfully!" });
+  } catch (err) {
+    console.error("Error updating profile:", err);
+    res
+      .status(500)
+      .json({ success: false, message: "Server error. Try again later." });
+  }
 });
 
 // ─────────────────────────────
@@ -227,6 +310,29 @@ app.post("/api/events/create", (req, res) => {
     res.json({ success: true, message: "Event created successfully!" });
   });
 });
+// GET /api/stats — Returns total events and attendees
+app.get("/api/stats", async (req, res) => {
+  try {
+    // Total events
+    const [events] = await con.promise().query(
+      "SELECT COUNT(*) AS totalEvents FROM Events"
+    );
+
+    // Total attendees across all events
+    const [attendees] = await con.promise().query(
+      "SELECT COUNT(*) AS totalAttendees FROM EventParticipants"
+    );
+
+    res.json({
+      success: true,
+      totalEvents: events[0].totalEvents,
+      totalAttendees: attendees[0].totalAttendees,
+    });
+  } catch (err) {
+    console.error("Error fetching stats:", err);
+    res.status(500).json({ success: false, message: "Server error." });
+  }
+});
 
 // Join Event
 // ─────────────────────────────
@@ -234,8 +340,8 @@ app.post("/api/events/create", (req, res) => {
 // ─────────────────────────────
 app.post("/api/events/join", async (req, res) => {
   const { eventId, code } = req.body;
+  console.log("Join attempt :",eventId);
   const user = req.session.user;
-
   if (!user) {
     return res.status(401).json({ success: false, message: "Not logged in." });
   }
@@ -368,6 +474,45 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
+// ─────────────────────────────
+// 🧠 GET EVENT BY ID
+// ─────────────────────────────
+app.get("/api/events/:id", async (req, res) => {
+  const eventId = req.params.id;
+
+  try {
+    // Fetch event by ID
+    const [events] = await con
+      .promise()
+      .query("SELECT * FROM Events WHERE event_id = ?", [eventId]);
+
+    if (events.length === 0) {
+      return res.status(404).json({ success: false, message: "Event not found" });
+    }
+
+    const event = events[0];
+
+    // Fetch participants for this event
+    const [participants] = await con
+      .promise()
+      .query(
+        `SELECT u.user_id, u.email 
+         FROM EventParticipants p 
+         JOIN users u ON p.user_id = u.user_id 
+         WHERE p.event_id = ?`,
+        [eventId]
+      );
+
+    res.json({
+      success: true,
+      event,
+      participants,
+    });
+  } catch (err) {
+    console.error("Error fetching event:", err);
+    res.status(500).json({ success: false, message: "Server error fetching event." });
+  }
+});
 
 // ─────────────────────────────
 // 🧠 STATIC FRONTEND + FALLBACK

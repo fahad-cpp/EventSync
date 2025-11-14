@@ -130,7 +130,7 @@ async function loadPublicEvents() {
               ${event.is_public ? "Public" : "Private"}
             </span>
           </div>
-          <p><strong>📅 Date:</strong> ${event.date}</p>
+          <p><strong>📅 Date:</strong> ${event.date.split("T")[0]}</p>
           <p><strong>⏰ Time:</strong> ${event.time}</p>
           <p><strong>📍 Location:</strong> ${event.location}</p>
         </div>
@@ -206,21 +206,22 @@ async function handleLogin(e) {
 
 async function handleRegister(e) {
   e.preventDefault();
+  const username = document.getElementById("registerUsername").value.trim();
   const email = document.getElementById("registerEmail").value.trim();
   const password = document.getElementById("registerPassword").value.trim();
   const confirmPassword = document.getElementById("confirmPassword").value.trim();
 
+  if (!username || !email || !password)
+    return showMessage("registerMessage", "All fields required.", "error");
+
   if (password !== confirmPassword)
     return showMessage("registerMessage", "Passwords do not match.", "error");
-
-  if (!email || !password)
-    return showMessage("registerMessage", "All fields required.", "error");
 
   try {
     const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, email, password }),
     });
     const data = await res.json();
 
@@ -230,10 +231,12 @@ async function handleRegister(e) {
     } else {
       showMessage("registerMessage", data.message, "error");
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     showMessage("registerMessage", "Server error. Try again later.", "error");
   }
 }
+
 
 // Handle admin login
 async function handleAdminLogin(e) {
@@ -271,35 +274,38 @@ function showMessage(elementId, message, type) {
 }
 
 // Store event registration
-async function registerEvent(eventId) {
+async function registerEvent(eventId, isPrivate = false) {
   const button = document.getElementById("eventRegisterButton");
-
   if (!button) return;
 
   button.addEventListener("click", async () => {
+    console.log("Button Clicked");
     const joinMessageEl = document.getElementById("joinMessage");
 
     try {
-      // Handle private event code validation
       let eventCode = null;
-      const codeInput = document.getElementById("eventCodeInput");
-      if (codeInput) {
+
+      // Only check code if the event is private
+      if (isPrivate) {
+        const codeInput = document.getElementById("eventCodeInput");
+        if (!codeInput) {
+          showMessage("joinMessage", "Event code input not found.", "error");
+          return;
+        }
+
         eventCode = codeInput.value.trim();
         if (!eventCode) {
-          showMessage(
-            "codeValidationMessage",
-            "Please enter the event code to join.",
-            "error"
-          );
+          showMessage("joinMessage", "Please enter the event code to join.", "error");
           return;
         }
       }
 
-      // Send join request to backend
+      console.log("Passing to Server");
+
       const response = await fetch("/api/events/join", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // important: sends cookies/session
+        credentials: "include",
         body: JSON.stringify({ eventId, code: eventCode }),
       });
 
@@ -321,6 +327,7 @@ async function registerEvent(eventId) {
 }
 
 
+
 // Load event details if on event details page
 async function loadEventDetails() {
   const params = new URLSearchParams(window.location.search);
@@ -339,7 +346,7 @@ async function loadEventDetails() {
     document.getElementById("eventTitle").textContent = event.title;
     document.getElementById("eventType").textContent = event.is_public ? "Public" : "Private";
     document.getElementById("eventType").className = `event-type-badge ${event.is_public ? "public" : "private"}`;
-    document.getElementById("eventDetailDate").textContent = event.date;
+    document.getElementById("eventDetailDate").textContent = event.date.split("T")[0];
     document.getElementById("eventDetailTime").textContent = event.time;
     document.getElementById("eventDetailLocation").textContent = event.location;
     document.getElementById("eventDetailDescription").textContent = event.description || "No description available";
@@ -349,14 +356,30 @@ async function loadEventDetails() {
     }
 
 
-    registerEvent(eventId);
+    registerEvent(eventId,!event.is_public);
   } catch (err) {
     console.error(err);
     document.querySelector(".event-details-container").innerHTML = "<p style='color:red'>Failed to load event details.</p>";
   }
 }
 
+async function loadHeroStats() {
+  try {
+    const res = await fetch("/api/stats");
+    const data = await res.json();
 
+    if (!data.success) return;
+
+    // Update the DOM
+    const eventsCreatedEl = document.getElementById("eventsCreated");
+    const attendeesCountEl = document.getElementById("attendeesCount");
+
+    if(eventsCreatedEl)eventsCreatedEl.textContent = data.totalEvents;
+    if(attendeesCountEl)attendeesCountEl.textContent = data.totalAttendees;
+  } catch (err) {
+    console.error("Error loading hero stats:", err);
+  }
+}
 // Load profile information
 async function loadProfilePage() {
   try {
@@ -434,17 +457,17 @@ async function loadUserCreatedEvents() {
       `;
       return;
     }
-
+    console.log(data);
     createdList.innerHTML = data.createdEvents
       .map(
         (event) => `
         <div class="event-card">
-          <h3>${event.name}</h3>
-          <p><strong>📅 Date:</strong> ${event.date}</p>
+          <h3>${event.title}</h3>
+          <p><strong>📅 Date:</strong> ${event.date.split("T")[0]}</p>
           <p><strong>⏰ Time:</strong> ${event.time}</p>
           <p><strong>📍 Location:</strong> ${event.location}</p>
           <p><strong>🏷️ Code:</strong> ${event.code}</p>
-          <a href="event-details.html?id=${event.id}" class="button secondary" style="display: inline-block; margin-top: var(--spacing-md);">View Details</a>
+          <a href="event-details.html?id=${event.event_id}" class="button secondary" style="display: inline-block; margin-top: var(--spacing-md);">View Details</a>
         </div>
       `
       )
@@ -480,11 +503,11 @@ async function loadUserRegisteredEvents() {
       .map(
         (event) => `
         <div class="event-card">
-          <h3>${event.name}</h3>
-          <p><strong>📅 Date:</strong> ${event.date}</p>
+          <h3>${event.title}</h3>
+          <p><strong>📅 Date:</strong> ${event.date.split("T")[0]}</p>
           <p><strong>⏰ Time:</strong> ${event.time}</p>
           <p><strong>📍 Location:</strong> ${event.location}</p>
-          <a href="event-details.html?id=${event.id}" class="button secondary" style="display: inline-block; margin-top: var(--spacing-md);">View Details</a>
+          <a href="event-details.html?id=${event.event_id}" class="button secondary" style="display: inline-block; margin-top: var(--spacing-md);">View Details</a>
         </div>
       `
       )
@@ -690,7 +713,7 @@ async function loadDashboard() {
         (event) => `
         <div class="event-card">
           <h3>${event.name}</h3>
-          <p><strong>📅 Date:</strong> ${event.date}</p>
+          <p><strong>📅 Date:</strong> ${event.date.split("T")[0]}</p>
           <p><strong>⏰ Time:</strong> ${event.time}</p>
           <p><strong>📍 Location:</strong> ${event.location}</p>
           <a href="event-details.html?id=${event.id}" class="button secondary" 
@@ -820,6 +843,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Call auth check on page load
 document.addEventListener("DOMContentLoaded", () => {
+  loadHeroStats();
   checkAuthentication();
   loadNavigation();
   attachFormListeners();
@@ -861,7 +885,7 @@ if (window.location.pathname.includes("auth.html")) {
 
 if (window.location.pathname.includes("event-details.html")) {
   document.addEventListener("DOMContentLoaded", () => {
-    checkAuthentication(); // optional, if page is protected
-    loadEventDetails();     // ✅ actually call the function
+    checkAuthentication();
+    loadEventDetails();
   });
 }
