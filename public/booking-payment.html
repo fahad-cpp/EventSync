@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment - EventSync</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="dashboard.html" class="nav-brand">
+          <!-- Changed emoji from ✨ to ⚡ -->
+          <span class="brand-icon">⚡</span>
+          <span class="brand-text">EventSync</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container" style="max-width: 600px;">
+    <h1>Complete Your Payment</h1>
+
+    <div class="form-card" style="margin-top: var(--spacing-lg);">
+      <div class="booking-summary">
+        <h3>Booking Summary</h3>
+        <p><strong>Venue:</strong> <span id="summaryVenue"></span></p>
+        <p><strong>Event Date:</strong> <span id="summaryDate"></span></p>
+        <p><strong>Event Type:</strong> <span id="summaryType"></span></p>
+        <p><strong>Guests:</strong> <span id="summaryGuests"></span></p>
+        <p style="margin-top: var(--spacing-lg); font-size: 1.2rem;">
+          <strong>Total Amount:</strong> <span class="price" id="summaryAmount">₹0</span>
+        </p>
+      </div>
+
+      <form id="paymentForm" style="margin-top: var(--spacing-lg);">
+        <div class="form-group">
+          <label for="paymentMethod">Payment Method *</label>
+          <select id="paymentMethod" required>
+            <option value="">Select payment method</option>
+            <option value="credit_card">Credit Card</option>
+            <option value="debit_card">Debit Card</option>
+            <option value="net_banking">Net Banking</option>
+            <option value="upi">UPI</option>
+          </select>
+        </div>
+
+        <div id="cardDetails" style="display: none;">
+          <div class="form-group">
+            <label for="cardNumber">Card Number</label>
+            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" />
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label for="cardExpiry">Expiry (MM/YY)</label>
+              <input type="text" id="cardExpiry" placeholder="12/25" maxlength="5" />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="cardCVV">CVV</label>
+              <input type="text" id="cardCVV" placeholder="123" maxlength="3" />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--spacing-lg);">Complete Payment</button>
+        <p id="paymentMessage" class="message"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 EventSync. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

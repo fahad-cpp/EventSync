@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - EventSync</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="admin-dashboard.html" class="nav-brand">
+          <!-- Changed emoji from ✨ to ⚡ -->
+          <span class="brand-icon">⚡</span>
+          <span class="brand-text">EventSync Admin</span>
+        </a>
+        <div class="nav-links">
+          <a href="admin-dashboard.html" class="nav-link active">Dashboard</a>
+          <a href="admin-venues.html" class="nav-link">Manage Venues</a>
+          <a href="admin-bookings.html" class="nav-link">Bookings</a>
+          <a href="admin-users.html" class="nav-link">Users</a>
+        </div>
+        <div class="nav-actions">
+          <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Admin Dashboard</h1>
+
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <div class="stat-icon">🏛️</div>
+        <div class="stat-content">
+          <h3>Total Venues</h3>
+          <p id="totalVenues" class="stat-number">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-content">
+          <h3>Total Users</h3>
+          <p id="totalUsers" class="stat-number">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-content">
+          <h3>Total Bookings</h3>
+          <p id="totalBookings" class="stat-number">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✓</div>
+        <div class="stat-content">
+          <h3>Confirmed</h3>
+          <p id="confirmedBookings" class="stat-number">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-content">
+          <h3>Total Revenue</h3>
+          <p id="totalRevenue" class="stat-number">₹0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-grid">
+      <div class="admin-card">
+        <h2>Quick Actions</h2>
+        <a href="admin-venues.html" class="btn btn-primary" style="display: block; margin-bottom: var(--spacing-md);">Add New Venue</a>
+        <a href="admin-bookings.html" class="btn btn-secondary" style="display: block;">View All Bookings</a>
+      </div>
+
+      <div class="admin-card">
+        <h2>Recent Activity</h2>
+        <div id="recentActivity" style="max-height: 300px; overflow-y: auto;">
+          <p style="color: var(--text-secondary);">Loading...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 EventSync Admin. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

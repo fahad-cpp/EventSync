@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Venues - EventSync Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="admin-dashboard.html" class="nav-brand">
+          <!-- Changed emoji from ✨ to ⚡ -->
+          <span class="brand-icon">⚡</span>
+          <span class="brand-text">EventSync Admin</span>
+        </a>
+        <div class="nav-links">
+          <a href="admin-dashboard.html" class="nav-link">Dashboard</a>
+          <a href="admin-venues.html" class="nav-link active">Manage Venues</a>
+          <a href="admin-bookings.html" class="nav-link">Bookings</a>
+          <a href="admin-users.html" class="nav-link">Users</a>
+        </div>
+        <div class="nav-actions">
+          <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Manage Venues</h1>
+
+    <button class="btn btn-primary" onclick="toggleVenueForm()" style="margin-bottom: var(--spacing-lg);">+ Add New Venue</button>
+
+    <div id="venueFormContainer" style="display: none; margin-bottom: var(--spacing-lg);">
+      <div class="form-card">
+        <h2>Add New Venue</h2>
+        <form id="venueForm">
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label for="venueName">Venue Name *</label>
+              <input type="text" id="venueName" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="capacity">Capacity (Guests) *</label>
+              <input type="number" id="capacity" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label for="location">Location *</label>
+              <input type="text" id="location" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="city">City *</label>
+              <input type="text" id="city" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label for="state">State</label>
+              <input type="text" id="state" />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="zipCode">ZIP Code</label>
+              <input type="text" id="zipCode" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label for="pricePerEvent">Price Per Event (₹) *</label>
+              <input type="number" id="pricePerEvent" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="bookingAdvanceDays">Min Advance Days *</label>
+              <input type="number" id="bookingAdvanceDays" value="30" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" rows="3"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="amenities">Amenities (comma-separated)</label>
+            <input type="text" id="amenities" placeholder="AC, Catering, Parking..." />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label for="contactName">Contact Name</label>
+              <input type="text" id="contactName" />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="contactPhone">Contact Phone</label>
+              <input type="tel" id="contactPhone" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactEmail">Contact Email</label>
+            <input type="email" id="contactEmail" />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Create Venue</button>
+          <button type="button" class="btn btn-outline" onclick="toggleVenueForm()">Cancel</button>
+          <p id="venueFormMessage" class="message"></p>
+        </form>
+      </div>
+    </div>
+
+    <div id="venuesList" class="event-list">
+      <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary);">Loading venues...</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 EventSync Admin. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

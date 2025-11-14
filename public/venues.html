@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse Venues - EventSync</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="dashboard.html" class="nav-brand">
+          <!-- Changed emoji from ✨ to ⚡ -->
+          <span class="brand-icon">⚡</span>
+          <span class="brand-text">EventSync</span>
+        </a>
+        <div class="nav-links">
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="venues.html" class="nav-link active">Browse Venues</a>
+          <a href="my-bookings.html" class="nav-link">My Bookings</a>
+        </div>
+        <div class="nav-actions">
+          <a href="profile.html" class="btn btn-secondary">Profile</a>
+          <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section>
+      <h1>Available Venues</h1>
+      
+      <div class="search-filter">
+        <input type="text" id="searchInput" placeholder="Search venues by name or location..." />
+        <select id="cityFilter">
+          <option value="">All Cities</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Bangalore">Bangalore</option>
+          <option value="Hyderabad">Hyderabad</option>
+        </select>
+        <input type="number" id="capacityFilter" placeholder="Min Guests" min="0" />
+      </div>
+
+      <div id="venuesList" class="event-list">
+        <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary);">Loading venues...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 EventSync. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

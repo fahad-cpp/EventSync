@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - EventSync</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+          <!-- Changed emoji from ✨ to ⚡ -->
+          <span class="brand-icon">⚡</span>
+          <span class="brand-text">EventSync</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container" style="max-width: 500px; margin-top: 40px; margin-bottom: 40px;">
+    <div class="form-card">
+      <div class="auth-tabs">
+        <input type="radio" id="loginTab" name="authTab" checked />
+        <label for="loginTab">Login</label>
+        <input type="radio" id="registerTab" name="authTab" />
+        <label for="registerTab">Register</label>
+        <input type="radio" id="adminTab" name="authTab" />
+        <label for="adminTab">Admin</label>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="form active">
+        <h2>User Login</h2>
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter password" required />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+        <p id="loginMessage" class="message"></p>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="form">
+        <h2>Create Account</h2>
+        <div class="form-group">
+          <label for="registerUsername">Username</label>
+          <input type="text" id="registerUsername" placeholder="username" required />
+        </div>
+        <div class="form-group">
+          <label for="registerEmail">Email</label>
+          <input type="email" id="registerEmail" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="registerFullName">Full Name</label>
+          <input type="text" id="registerFullName" placeholder="Your Name" />
+        </div>
+        <div class="form-group">
+          <label for="registerPhone">Phone</label>
+          <input type="tel" id="registerPhone" placeholder="9876543210" />
+        </div>
+        <div class="form-group">
+          <label for="registerPassword">Password</label>
+          <input type="password" id="registerPassword" placeholder="Enter password" required />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" placeholder="Confirm password" required />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+        <p id="registerMessage" class="message"></p>
+      </form>
+
+      <!-- Admin Login Form -->
+      <form id="adminForm" class="form">
+        <h2>Admin Login</h2>
+        <div class="form-group">
+          <label for="adminEmail">Admin Email</label>
+          <input type="email" id="adminEmail" placeholder="admin@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" placeholder="Enter password" required />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Admin Login</button>
+        <p id="adminMessage" class="message"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 EventSync. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

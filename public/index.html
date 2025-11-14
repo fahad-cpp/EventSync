@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EventSync - Venue Booking Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+          <span class="brand-icon">⚡</span>
+          <span class="brand-text">EventSync</span>
+        </a>
+        <div class="nav-actions" id="navActions">
+          <a href="auth.html" class="btn btn-primary">Login</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">Book Your Perfect Venue</h1>
+        <p class="hero-subtitle">Find and book the ideal wedding or birthday venue in your city</p>
+        <div class="hero-buttons">
+          <a href="venues.html" class="btn btn-primary btn-lg">Browse Venues</a>
+        </div>
+        <!-- Add stats section to display venue, booking, and user counts -->
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-number" id="statsVenues">0</div>
+            <div class="stat-label">Premium Venues</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number" id="statsBookings">0</div>
+            <div class="stat-label">Bookings Made</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number" id="statsUsers">0</div>
+            <div class="stat-label">Happy Users</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2 class="section-title">Why Choose EventSync?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🏛️</div>
+          <h3 class="feature-title">Premium Venues</h3>
+          <p class="feature-description">Handpicked wedding and birthday venues</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💳</div>
+          <h3 class="feature-title">Secure Payment</h3>
+          <p class="feature-description">Safe and secure booking process</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📞</div>
+          <h3 class="feature-title">Direct Contact</h3>
+          <p class="feature-description">Connect directly with venue owners</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✓</div>
+          <h3 class="feature-title">Easy Cancellation</h3>
+          <p class="feature-description">Cancel bookings anytime</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 EventSync. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

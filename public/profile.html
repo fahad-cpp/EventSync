@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile - EventSync</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="dashboard.html" class="nav-brand">
+          <span class="brand-icon">⚡</span>
+          <span class="brand-text">EventSync</span>
+        </a>
+        <div class="nav-links">
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="venues.html" class="nav-link">Browse Venues</a>
+          <a href="my-bookings.html" class="nav-link">My Bookings</a>
+        </div>
+        <div class="nav-actions">
+          <a href="profile.html" class="btn btn-secondary">Profile</a>
+          <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>My Profile</h1>
+
+    <!-- Improved profile layout with better spacing and card structure -->
+    <div class="profile-container">
+      <div class="profile-card">
+        <h2>Profile Information</h2>
+        <div class="profile-info-grid">
+          <div class="form-group">
+            <label>Username</label>
+            <p id="profileUsername" class="profile-value">-</p>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <p id="profileEmail" class="profile-value">-</p>
+          </div>
+          <div class="form-group">
+            <label>Full Name</label>
+            <p id="profileFullName" class="profile-value">-</p>
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <p id="profilePhone" class="profile-value">-</p>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="toggleEditMode()" style="margin-top: var(--spacing-lg);">Edit Profile</button>
+      </div>
+
+      <div id="editProfileForm" style="display: none;" class="profile-card">
+        <h2>Edit Profile</h2>
+        <form id="updateForm">
+          <div class="form-group">
+            <label for="editUsername">Username</label>
+            <input type="text" id="editUsername" required />
+          </div>
+          <div class="form-group">
+            <label for="editEmail">Email</label>
+            <input type="email" id="editEmail" required />
+          </div>
+          <div class="form-group">
+            <label for="editFullName">Full Name</label>
+            <input type="text" id="editFullName" />
+          </div>
+          <div class="form-group">
+            <label for="editPhone">Phone</label>
+            <input type="tel" id="editPhone" />
+          </div>
+          <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <button type="button" class="btn btn-outline" onclick="toggleEditMode()">Cancel</button>
+          </div>
+          <p id="updateMessage" class="message"></p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Improved stats card with better grid layout and overflow handling -->
+    <div class="profile-card">
+      <h2>Booking Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat">
+          <p class="stat-label">Total Bookings</p>
+          <p class="stat-value" id="statTotalBookings">0</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">Confirmed</p>
+          <p class="stat-value" id="statConfirmed">0</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">Pending</p>
+          <p class="stat-value" id="statPending">0</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">Total Spent</p>
+          <p class="stat-value" id="statTotalSpent">₹0</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 EventSync. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

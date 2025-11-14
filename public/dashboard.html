@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - EventSync</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="dashboard.html" class="nav-brand">
+          <!-- Changed emoji from ✨ to ⚡ -->
+          <span class="brand-icon">⚡</span>
+          <span class="brand-text">EventSync</span>
+        </a>
+        <div class="nav-links">
+          <a href="dashboard.html" class="nav-link active">Dashboard</a>
+          <a href="venues.html" class="nav-link">Browse Venues</a>
+          <a href="my-bookings.html" class="nav-link">My Bookings</a>
+        </div>
+        <div class="nav-actions">
+          <a href="profile.html" class="btn btn-secondary">Profile</a>
+          <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="dashboard-hero">
+      <div class="dashboard-welcome">
+        <h1>Welcome back, <span id="dashboardUsername">User</span>!</h1>
+        <p>Find and book your perfect venue</p>
+      </div>
+      <div class="dashboard-quick-actions">
+        <a href="venues.html" class="btn btn-primary btn-lg">Browse Venues</a>
+        <a href="my-bookings.html" class="btn btn-primary btn-lg">My Bookings</a>
+        <a href="profile.html" class="btn btn-secondary btn-lg">Settings</a>
+      </div>
+    </section>
+
+    <section class="dashboard-stats">
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-content">
+          <h3>Total Bookings</h3>
+          <p id="totalBookings" class="stat-number">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✓</div>
+        <div class="stat-content">
+          <h3>Confirmed</h3>
+          <p id="confirmedBookings" class="stat-number">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-content">
+          <h3>Total Spent</h3>
+          <p id="totalSpent" class="stat-number">0</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-recent">
+      <h2>Your Recent Bookings</h2>
+      <div id="recentBookingsList" class="event-list">
+        <p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center;">Loading bookings...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 EventSync. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
