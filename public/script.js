@@ -1,7 +1,3 @@
-// ═══════════════════════════════════════════════════════════
-// UTILITY FUNCTIONS
-// ═══════════════════════════════════════════════════════════
-
 function showMessage(elementId, message, type) {
   const messageEl = document.getElementById(elementId);
   if (messageEl) {
@@ -9,10 +5,6 @@ function showMessage(elementId, message, type) {
     messageEl.className = `message ${type}`;
   }
 }
-
-// ═══════════════════════════════════════════════════════════
-// AUTH FUNCTIONS
-// ═══════════════════════════════════════════════════════════
 
 async function handleLogin(e) {
   e.preventDefault();
@@ -63,8 +55,11 @@ async function handleRegister(e) {
     if (data.success) {
       showMessage("registerMessage", "Registration successful! Login to continue.", "success");
       setTimeout(() => {
-        document.getElementById("loginTab").checked = true;
         document.getElementById("registerForm").reset();
+        document.getElementById("loginTab").checked = true;
+        // Trigger form display update
+        const loginTab = document.getElementById("loginTab");
+        loginTab.dispatchEvent(new Event('change'));
       }, 1000);
     } else {
       showMessage("registerMessage", data.message, "error");
@@ -117,7 +112,7 @@ async function handleLogout() {
 async function checkAuthentication() {
   const currentPage = window.location.pathname.split("/").pop() || "index.html";
   const protectedPages = ["dashboard.html", "venues.html", "my-bookings.html", "profile.html", "venue-details.html", "booking-payment.html"];
-  const adminPages = ["admin-dashboard.html", "admin-users.html", "admin-venues.html"];
+  const adminPages = ["admin-dashboard.html", "admin-users.html", "admin-venues.html", "admin-bookings.html"];
 
   try {
     const res = await fetch("/api/auth/status", {
@@ -136,10 +131,6 @@ async function checkAuthentication() {
     console.error("Auth check failed:", err);
   }
 }
-
-// ═══════════════════════════════════════════════════════════
-// VENUE FUNCTIONS
-// ═══════════════════════════════════════════════════════════
 
 async function loadVenues() {
   try {
@@ -224,15 +215,16 @@ async function loadVenueDetails() {
     document.getElementById("ownerName").textContent = venue.full_name;
     document.getElementById("ownerPhone").textContent = venue.contact_phone;
     document.getElementById("ownerEmail").textContent = venue.contact_email;
+
+    const imageContainer = document.getElementById("venueImageContainer");
+    if (venue.images_url) {
+      imageContainer.style.background = `url('data:image/jpeg;base64,${venue.images_url}') center/cover`;
+    }
   } catch (err) {
     console.error("Error loading venue:", err);
     document.querySelector(".venue-details-container").innerHTML = "<p>Failed to load venue details</p>";
   }
 }
-
-// ═══════════════════════════════════════════════════════════
-// BOOKING FUNCTIONS
-// ═══════════════════════════════════════════════════════════
 
 async function handleBooking(e) {
   e.preventDefault();
@@ -275,7 +267,6 @@ async function handleBooking(e) {
         guestCount,
       };
 
-      // Redirect to payment
       setTimeout(() => (window.location.href = "booking-payment.html"), 1500);
     } else {
       showMessage("bookingMessage", data.message, "error");
@@ -293,10 +284,6 @@ function updateTotalPrice() {
     }
   }
 }
-
-// ═══════════════════════════════════════════════════════════
-// PAYMENT FUNCTIONS
-// ═══════════════════════════════════════════════════════════
 
 async function handlePayment(e) {
   e.preventDefault();
@@ -345,10 +332,6 @@ function initPaymentForm() {
   document.getElementById("summaryGuests").textContent = booking.guestCount;
   document.getElementById("summaryAmount").textContent = `₹${booking.totalAmount}`;
 }
-
-// ═══════════════════════════════════════════════════════════
-// MY BOOKINGS FUNCTIONS
-// ═══════════════════════════════════════════════════════════
 
 async function loadMyBookings(status = "all") {
   try {
@@ -422,13 +405,8 @@ async function cancelBooking(bookingId) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// DASHBOARD FUNCTIONS
-// ═══════════════════════════════════════════════════════════
-
 async function loadDashboard() {
   try {
-    // Check auth
     const authRes = await fetch("/api/auth/status", {
       credentials: "include",
     });
@@ -439,7 +417,6 @@ async function loadDashboard() {
       return;
     }
 
-    // Get user profile
     const userRes = await fetch("/api/user/profile", {
       credentials: "include",
     });
@@ -449,7 +426,6 @@ async function loadDashboard() {
       document.getElementById("dashboardUsername").textContent = userData.user.username;
     }
 
-    // Load bookings
     const bookingsRes = await fetch("/api/bookings/user", {
       credentials: "include",
     });
@@ -490,10 +466,6 @@ async function loadDashboard() {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// PROFILE PAGE FUNCTIONS
-// ═══════════════════════════════════════════════════════════
-
 async function loadProfile() {
   try {
     const res = await fetch("/api/user/profile", {
@@ -512,13 +484,11 @@ async function loadProfile() {
     document.getElementById("profileFullName").textContent = user.full_name || "Not provided";
     document.getElementById("profilePhone").textContent = user.phone || "Not provided";
 
-    // Populate edit form
     document.getElementById("editUsername").value = user.username;
     document.getElementById("editEmail").value = user.email;
     document.getElementById("editFullName").value = user.full_name || "";
     document.getElementById("editPhone").value = user.phone || "";
 
-    // Load booking stats
     const bookingsRes = await fetch("/api/bookings/user", {
       credentials: "include",
     });
@@ -581,10 +551,6 @@ async function handleUpdateProfile(e) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// ADMIN DASHBOARD FUNCTIONS
-// ═══════════════════════════════════════════════════════════
-
 async function loadAdminDashboard() {
   try {
     const res = await fetch("/api/admin/reports", {
@@ -601,7 +567,6 @@ async function loadAdminDashboard() {
       document.getElementById("totalRevenue").textContent = `₹${stats.totalRevenue}`;
     }
 
-    // Load recent activity
     const bookingsRes = await fetch("/api/admin/bookings", {
       credentials: "include",
     });
@@ -623,10 +588,6 @@ async function loadAdminDashboard() {
     console.error("Error loading dashboard:", err);
   }
 }
-
-// ═══════════════════════════════════════════════════════════
-// ADMIN VENUE MANAGEMENT
-// ═══════════════════════════════════════════════════════════
 
 async function loadAdminVenues() {
   try {
@@ -658,7 +619,7 @@ function displayAdminVenues(venues) {
       <p class="price">₹${venue.price_per_event}</p>
       <p><strong>Owner Contact:</strong> ${venue.contact_phone}</p>
       <div style="margin-top: var(--spacing-md);">
-        <button class="btn btn-secondary" style="margin-right: var(--spacing-sm);">Edit</button>
+        <button class="btn btn-secondary" onclick="editVenue(${venue.venue_id})" style="margin-right: var(--spacing-sm);">Edit</button>
         <button class="btn btn-danger" onclick="deleteVenue(${venue.venue_id})">Delete</button>
       </div>
     </div>
@@ -668,6 +629,46 @@ function displayAdminVenues(venues) {
 function toggleVenueForm() {
   const form = document.getElementById("venueFormContainer");
   form.style.display = form.style.display === "none" ? "block" : "none";
+  if (form.style.display === "block") {
+    document.getElementById("venueForm").reset();
+    document.getElementById("formTitle").textContent = "Add New Venue";
+    window.editingVenueId = null;
+  }
+}
+
+async function editVenue(venueId) {
+  try {
+    const res = await fetch(`/api/venues/${venueId}`);
+    const data = await res.json();
+    
+    if (!data.success) {
+      alert("Failed to load venue");
+      return;
+    }
+
+    const venue = data.venue;
+    window.editingVenueId = venueId;
+
+    document.getElementById("formTitle").textContent = "Edit Venue";
+    document.getElementById("venueName").value = venue.venue_name;
+    document.getElementById("location").value = venue.location;
+    document.getElementById("city").value = venue.city;
+    document.getElementById("state").value = venue.state;
+    document.getElementById("zipCode").value = venue.zip_code || "";
+    document.getElementById("description").value = venue.description;
+    document.getElementById("capacity").value = venue.capacity;
+    document.getElementById("pricePerEvent").value = venue.price_per_event;
+    document.getElementById("amenities").value = venue.amenities || "";
+    document.getElementById("contactName").value = venue.contact_name || "";
+    document.getElementById("contactPhone").value = venue.contact_phone || "";
+    document.getElementById("contactEmail").value = venue.contact_email || "";
+    document.getElementById("bookingAdvanceDays").value = venue.booking_advance_days;
+    document.getElementById("venueImage").value = "";
+
+    document.getElementById("venueFormContainer").style.display = "block";
+  } catch (err) {
+    alert("Error loading venue");
+  }
 }
 
 async function handleCreateVenue(e) {
@@ -689,28 +690,64 @@ async function handleCreateVenue(e) {
     bookingAdvanceDays: parseInt(document.getElementById("bookingAdvanceDays").value),
   };
 
-  try {
-    const res = await fetch("/api/venues/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(venueData),
-    });
+  const imageFile = document.getElementById("venueImage")?.files[0];
+  if (imageFile) {
+    const reader = new FileReader();
+    reader.onload = async function(event) {
+      const base64Image = event.target.result;
+      venueData.images_url = base64Image;
 
-    const data = await res.json();
+      try {
+        const res = await fetch(window.editingVenueId ? `/api/venues/${window.editingVenueId}` : "/api/venues/create", {
+          method: window.editingVenueId ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(venueData),
+        });
 
-    if (data.success) {
-      showMessage("venueFormMessage", "Venue created successfully!", "success");
-      setTimeout(() => {
-        toggleVenueForm();
-        document.getElementById("venueForm").reset();
-        loadAdminVenues();
-      }, 1000);
-    } else {
-      showMessage("venueFormMessage", data.message, "error");
+        const data = await res.json();
+
+        if (data.success) {
+          showMessage("venueFormMessage", window.editingVenueId ? "Venue updated successfully!" : "Venue created successfully!", "success");
+          setTimeout(() => {
+            toggleVenueForm();
+            document.getElementById("venueForm").reset();
+            window.editingVenueId = null;
+            loadAdminVenues();
+          }, 1000);
+        } else {
+          showMessage("venueFormMessage", data.message, "error");
+        }
+      } catch (err) {
+        showMessage("venueFormMessage", "Error saving venue", "error");
+      }
+    };
+    reader.readAsDataURL(imageFile);
+  } else {
+    try {
+      const res = await fetch(window.editingVenueId ? `/api/venues/${window.editingVenueId}` : "/api/venues/create", {
+        method: window.editingVenueId ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(venueData),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        showMessage("venueFormMessage", window.editingVenueId ? "Venue updated successfully!" : "Venue created successfully!", "success");
+        setTimeout(() => {
+          toggleVenueForm();
+          document.getElementById("venueForm").reset();
+          window.editingVenueId = null;
+          loadAdminVenues();
+        }, 1000);
+      } else {
+        showMessage("venueFormMessage", data.message, "error");
+      }
+    } catch (err) {
+      showMessage("venueFormMessage", "Error saving venue", "error");
     }
-  } catch (err) {
-    showMessage("venueFormMessage", "Error creating venue", "error");
   }
 }
 
@@ -735,10 +772,6 @@ async function deleteVenue(venueId) {
     alert("Error deleting venue");
   }
 }
-
-// ═══════════════════════════════════════════════════════════
-// ADMIN BOOKINGS
-// ═══════════════════════════════════════════════════════════
 
 async function loadAdminBookings(status = "all") {
   try {
@@ -766,7 +799,7 @@ function displayAdminBookings(bookings) {
   if (!tbody) return;
 
   if (bookings.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No bookings</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align: center;">No bookings</td></tr>';
     return;
   }
 
@@ -781,12 +814,37 @@ function displayAdminBookings(bookings) {
       <td><span class="status-badge ${booking.booking_status}">${booking.booking_status}</span></td>
       <td>₹${booking.total_amount}</td>
       <td>
+        ${booking.booking_status === "pending" ? `
+          <button class="btn btn-primary" onclick="confirmBooking(${booking.booking_id})" style="padding: var(--spacing-xs) var(--spacing-sm); font-size: 0.85rem; margin-right: 4px;">Confirm</button>
+        ` : ""}
         ${booking.booking_status !== "cancelled" ? `
           <button class="btn btn-danger" onclick="adminCancelBooking(${booking.booking_id})" style="padding: var(--spacing-xs) var(--spacing-sm); font-size: 0.85rem;">Cancel</button>
         ` : ""}
       </td>
     </tr>
   `).join("");
+}
+
+async function confirmBooking(bookingId) {
+  if (!confirm("Confirm this booking?")) return;
+
+  try {
+    const res = await fetch(`/api/bookings/${bookingId}/confirm`, {
+      method: "PUT",
+      credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Booking confirmed");
+      loadAdminBookings("all");
+    } else {
+      alert(data.message);
+    }
+  } catch (err) {
+    alert("Error confirming booking");
+  }
 }
 
 async function adminCancelBooking(bookingId) {
@@ -804,16 +862,12 @@ async function adminCancelBooking(bookingId) {
       alert("Booking cancelled");
       loadAdminBookings("all");
     } else {
-      alert(data.message);
+      alert("Error");
     }
   } catch (err) {
     alert("Error");
   }
 }
-
-// ═══════════════════════════════════════════════════════════
-// ADMIN USERS
-// ═══════════════════════════════════════════════════════════
 
 async function loadAdminUsers() {
   try {
@@ -836,7 +890,7 @@ function displayAdminUsers(users) {
   if (!tbody) return;
 
   if (users.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No users</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No users</td></tr>';
     return;
   }
 
@@ -848,13 +902,36 @@ function displayAdminUsers(users) {
       <td>${user.full_name || "-"}</td>
       <td>${user.phone || "-"}</td>
       <td>${new Date(user.created_at).toLocaleDateString()}</td>
+      <td>
+        ${user.role === 'user' ? `
+          <button class="btn btn-danger" onclick="deleteUser(${user.user_id})" style="padding: var(--spacing-xs) var(--spacing-sm); font-size: 0.85rem;">Delete</button>
+        ` : ""}
+      </td>
     </tr>
   `).join("");
 }
 
-// ═══════════════════════════════════════════════════════════
-// AUTH TAB SETUP
-// ═══════════════════════════════════════════════════════════
+async function deleteUser(userId) {
+  if (!confirm("Are you sure you want to delete this user?")) return;
+
+  try {
+    const res = await fetch(`/api/admin/users/${userId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("User deleted successfully");
+      loadAdminUsers();
+    } else {
+      alert(data.message);
+    }
+  } catch (err) {
+    alert("Error deleting user");
+  }
+}
 
 function setupAuthTabs() {
   const tabs = document.querySelectorAll(".auth-tabs input");
@@ -870,14 +947,9 @@ function setupAuthTabs() {
   });
 }
 
-// ═══════════════════════════════════════════════════════════
-// INITIALIZATION
-// ═══════════════════════════════════════════════════════════
-
 document.addEventListener("DOMContentLoaded", () => {
   const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
-  // Update nav
   async function updateNav() {
     const navActions = document.getElementById("navActions");
     if (!navActions) return;
@@ -907,7 +979,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateNav();
 
-  // Page-specific initialization
   if (currentPage === "auth.html") {
     setupAuthTabs();
     document.getElementById("loginForm")?.addEventListener("submit", handleLogin);
@@ -976,11 +1047,6 @@ document.addEventListener("DOMContentLoaded", () => {
     checkAuthentication();
     loadAdminVenues();
     document.getElementById("venueForm")?.addEventListener("submit", handleCreateVenue);
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        loadAdminVenues();
-      });
-    });
   }
 
   if (currentPage === "admin-bookings.html") {
@@ -998,7 +1064,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadAdminUsers();
   }
 
-  // Logout buttons
   document.querySelectorAll("#logoutBtn").forEach(btn => {
     btn.addEventListener("click", handleLogout);
   });

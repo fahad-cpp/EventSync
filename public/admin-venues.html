@@ -38,7 +38,8 @@
 
     <div id="venueFormContainer" style="display: none; margin-bottom: var(--spacing-lg);">
       <div class="form-card">
-        <h2>Add New Venue</h2>
+        <!-- Updated title to show "Add" or "Edit" dynamically -->
+        <h2 id="formTitle">Add New Venue</h2>
         <form id="venueForm">
           <div class="form-row">
             <div class="form-group" style="flex: 1;">
@@ -56,16 +57,23 @@
               <label for="location">Location *</label>
               <input type="text" id="location" required />
             </div>
+            <!-- Changed city and state to dropdowns with only Ahmedabad, Gujarat -->
             <div class="form-group" style="flex: 1;">
               <label for="city">City *</label>
-              <input type="text" id="city" required />
+              <select id="city" required>
+                <option value="">Select City</option>
+                <option value="Ahmedabad">Ahmedabad</option>
+              </select>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group" style="flex: 1;">
-              <label for="state">State</label>
-              <input type="text" id="state" />
+              <label for="state">State *</label>
+              <select id="state" required>
+                <option value="">Select State</option>
+                <option value="Gujarat">Gujarat</option>
+              </select>
             </div>
             <div class="form-group" style="flex: 1;">
               <label for="zipCode">ZIP Code</label>
@@ -94,6 +102,12 @@
             <input type="text" id="amenities" placeholder="AC, Catering, Parking..." />
           </div>
 
+          <!-- Added image upload field -->
+          <div class="form-group">
+            <label for="venueImage">Venue Image</label>
+            <input type="file" id="venueImage" accept="image/*" />
+          </div>
+
           <div class="form-row">
             <div class="form-group" style="flex: 1;">
               <label for="contactName">Contact Name</label>
@@ -110,7 +124,7 @@
             <input type="email" id="contactEmail" />
           </div>
 
-          <button type="submit" class="btn btn-primary">Create Venue</button>
+          <button type="submit" class="btn btn-primary">Save Venue</button>
           <button type="button" class="btn btn-outline" onclick="toggleVenueForm()">Cancel</button>
           <p id="venueFormMessage" class="message"></p>
         </form>

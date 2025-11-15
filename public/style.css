@@ -682,6 +682,44 @@ html {
   font-size: 0.9rem;
 }
 
+/* Added search-filter styling */
+.search-filter {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.search-filter input,
+.search-filter select {
+  padding: 0.75rem var(--spacing-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background-color: var(--surface-light);
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 150px;
+}
+
+.search-filter input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-filter input:focus,
+.search-filter select:focus {
+  outline: none;
+  border-color: var(--accent);
+  background-color: var(--surface-lighter);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+.search-filter select {
+  cursor: pointer;
+}
+
 /* Event/Venue List */
 .event-list {
   display: grid;

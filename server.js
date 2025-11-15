@@ -235,18 +235,16 @@ app.post("/api/venues/create", async (req, res) => {
   }
 
   try {
-    const { venueName, location, city, state, zipCode, description, capacity, pricePerEvent, amenities, contactName, contactPhone, contactEmail, bookingAdvanceDays } = req.body;
+    const { venueName, location, city, state, zipCode, description, capacity, pricePerEvent, amenities, contactName, contactPhone, contactEmail, bookingAdvanceDays, images_url } = req.body;
 
     if (!venueName || !location || !capacity || !pricePerEvent) {
       return res.json({ success: false, message: "Required fields missing." });
     }
 
-    await con
-      .promise()
-      .query(
-        "INSERT INTO venues (venue_name, owner_id, location, city, state, zip_code, description, capacity, price_per_event, amenities, contact_name, contact_phone, contact_email, booking_advance_days, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')",
-        [venueName, req.session.user.id, location, city, state, zipCode, description, capacity, pricePerEvent, amenities, contactName, contactPhone, contactEmail, bookingAdvanceDays || 30]
-      );
+    await con.promise().query(
+      "INSERT INTO venues (venue_name, owner_id, location, city, state, zip_code, description, capacity, price_per_event, amenities, contact_name, contact_phone, contact_email, booking_advance_days, images_url, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')",
+      [venueName, req.session.user.id, location, city, state, zipCode, description, capacity, pricePerEvent, amenities, contactName, contactPhone, contactEmail, bookingAdvanceDays || 30, images_url || null]
+    );
 
     res.json({ success: true, message: "Venue created successfully." });
   } catch (err) {
@@ -262,14 +260,19 @@ app.put("/api/venues/:id", async (req, res) => {
   }
 
   try {
-    const { venueName, location, city, state, zipCode, description, capacity, pricePerEvent, amenities, contactName, contactPhone, contactEmail, status } = req.body;
+    const { venueName, location, city, state, zipCode, description, capacity, pricePerEvent, amenities, contactName, contactPhone, contactEmail, bookingAdvanceDays, images_url } = req.body;
 
-    await con
-      .promise()
-      .query(
-        "UPDATE venues SET venue_name = ?, location = ?, city = ?, state = ?, zip_code = ?, description = ?, capacity = ?, price_per_event = ?, amenities = ?, contact_name = ?, contact_phone = ?, contact_email = ?, status = ? WHERE venue_id = ?",
-        [venueName, location, city, state, zipCode, description, capacity, pricePerEvent, amenities, contactName, contactPhone, contactEmail, status, req.params.id]
+    if (images_url) {
+      await con.promise().query(
+        "UPDATE venues SET venue_name = ?, location = ?, city = ?, state = ?, zip_code = ?, description = ?, capacity = ?, price_per_event = ?, amenities = ?, contact_name = ?, contact_phone = ?, contact_email = ?, booking_advance_days = ?, images_url = ? WHERE venue_id = ?",
+        [venueName, location, city, state, zipCode, description, capacity, pricePerEvent, amenities, contactName, contactPhone, contactEmail, bookingAdvanceDays || 30, images_url, req.params.id]
       );
+    } else {
+      await con.promise().query(
+        "UPDATE venues SET venue_name = ?, location = ?, city = ?, state = ?, zip_code = ?, description = ?, capacity = ?, price_per_event = ?, amenities = ?, contact_name = ?, contact_phone = ?, contact_email = ?, booking_advance_days = ? WHERE venue_id = ?",
+        [venueName, location, city, state, zipCode, description, capacity, pricePerEvent, amenities, contactName, contactPhone, contactEmail, bookingAdvanceDays || 30, req.params.id]
+      );
+    }
 
     res.json({ success: true, message: "Venue updated successfully." });
   } catch (err) {
@@ -424,6 +427,32 @@ app.put("/api/bookings/:id/cancel", async (req, res) => {
   } catch (err) {
     console.error("Error cancelling booking:", err);
     res.status(500).json({ success: false, message: "Error cancelling booking." });
+  }
+});
+
+// Confirm booking (admin only)
+app.put("/api/bookings/:id/confirm", async (req, res) => {
+  if (!req.session.user || req.session.user.role !== "admin") {
+    return res.status(401).json({ success: false, message: "Unauthorized." });
+  }
+
+  try {
+    const [bookings] = await con
+      .promise()
+      .query("SELECT * FROM bookings WHERE booking_id = ?", [req.params.id]);
+
+    if (bookings.length === 0) {
+      return res.json({ success: false, message: "Booking not found." });
+    }
+
+    await con
+      .promise()
+      .query("UPDATE bookings SET booking_status = 'confirmed' WHERE booking_id = ?", [req.params.id]);
+
+    res.json({ success: true, message: "Booking confirmed successfully." });
+  } catch (err) {
+    console.error("Error confirming booking:", err);
+    res.status(500).json({ success: false, message: "Error confirming booking." });
   }
 });
 
@@ -604,6 +633,28 @@ app.get("/api/admin/reports", async (req, res) => {
   } catch (err) {
     console.error("Error fetching reports:", err);
     res.status(500).json({ success: false, message: "Error fetching reports." });
+  }
+});
+
+// Delete user (admin only)
+app.delete("/api/admin/users/:id", async (req, res) => {
+  if (!req.session.user || req.session.user.role !== "admin") {
+    return res.status(401).json({ success: false, message: "Unauthorized." });
+  }
+
+  try {
+    const userId = req.params.id;
+
+    if (userId == req.session.user.id) {
+      return res.json({ success: false, message: "Cannot delete your own account." });
+    }
+
+    await con.promise().query("DELETE FROM users WHERE user_id = ? AND role = 'user'", [userId]);
+
+    res.json({ success: true, message: "User deleted successfully." });
+  } catch (err) {
+    console.error("Error deleting user:", err);
+    res.status(500).json({ success: false, message: "Error deleting user." });
   }
 });
 
