@@ -218,7 +218,12 @@ async function loadVenueDetails() {
 
     const imageContainer = document.getElementById("venueImageContainer");
     if (venue.images_url) {
-      imageContainer.style.background = `url('data:image/jpeg;base64,${venue.images_url}') center/cover`;
+      const imageData = venue.images_url.startsWith('data:') ? venue.images_url : `data:image/jpeg;base64,${venue.images_url}`;
+      imageContainer.style.backgroundImage = `url('${imageData}')`;
+      imageContainer.style.backgroundSize = 'cover';
+      imageContainer.style.backgroundPosition = 'center';
+    } else {
+      imageContainer.style.backgroundColor = 'var(--surface-light)';
     }
   } catch (err) {
     console.error("Error loading venue:", err);

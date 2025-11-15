@@ -1036,49 +1036,7 @@ html {
   margin-bottom: var(--spacing-xl);
 }
 
-.admin-card {
+/* .admin-card {
   background-color: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: var(--spacing-lg);
-}
-
-.admin-card h2 {
-  margin-bottom: var(--spacing-lg);
-  color: var(--primary);
-}
-
-.table-responsive {
-  overflow-x: auto;
-  margin: var(--spacing-lg) 0;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: var(--surface);
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.data-table thead {
-  background-color: var(--surface-light);
-  border-bottom: 2px solid var(--border);
-}
-
-.data-table th {
-  padding: var(--spacing-md);
-  text-align: left;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.data-table td {
-  padding: var(--spacing-md);
-  border-bottom: 1px solid var(--border);
-  color: var(--text-secondary);
-}
-
-/* .data-table tbody tr:hover {
-  background-color: */
+} */
