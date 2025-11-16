@@ -295,25 +295,33 @@ async function handleBooking(e) {
     const data = await res.json();
 
     if (data.success) {
-      window.currentBooking = {
+      const bookingInfo = {
         bookingId: data.bookingId,
         totalAmount: data.totalAmount,
         venueName: window.currentVenue.venue_name,
         eventType,
         eventDate,
+        eventTime,
         guestCount,
       };
 
+      // Save for next page
+      sessionStorage.setItem("currentBooking", JSON.stringify(bookingInfo));
+
       console.log("proceeding to payment");
-      setTimeout(() => (window.location.href = "booking-payment.html"), 1500);
+
+      setTimeout(() => {
+        window.location.href = "booking-payment.html";
+      }, 1500);
     } else {
-      console.log("Error creating Booking")
+      console.log("Error creating Booking");
       showMessage("bookingMessage", data.message, "error");
     }
   } catch (err) {
     showMessage("bookingMessage", "Booking error", "error");
   }
 }
+
 
 function updateTotalPrice() {
   if (window.currentVenue) {
@@ -327,7 +335,10 @@ function updateTotalPrice() {
 async function handlePayment(e) {
   e.preventDefault();
 
-  if (!window.currentBooking) {
+  // Load booking stored from previous page
+  const currentBooking = JSON.parse(sessionStorage.getItem("currentBooking"));
+
+  if (!currentBooking) {
     showMessage("paymentMessage", "Booking not found", "error");
     return;
   }
@@ -340,7 +351,7 @@ async function handlePayment(e) {
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({
-        bookingId: window.currentBooking.bookingId,
+        bookingId: currentBooking.bookingId,
         paymentMethod,
       }),
     });
@@ -349,7 +360,13 @@ async function handlePayment(e) {
 
     if (data.success) {
       showMessage("paymentMessage", "Payment successful! Booking confirmed.", "success");
-      setTimeout(() => (window.location.href = "my-bookings.html"), 2000);
+
+      // Optional: Clear booking from storage after payment
+      sessionStorage.removeItem("currentBooking");
+
+      setTimeout(() => {
+        window.location.href = "my-bookings.html";
+      }, 2000);
     } else {
       showMessage("paymentMessage", data.message, "error");
     }
@@ -358,9 +375,13 @@ async function handlePayment(e) {
   }
 }
 
+
 function initPaymentForm() {
-  const booking = window.currentBooking;
+  // Load booking from sessionStorage
+  const booking = JSON.parse(sessionStorage.getItem("currentBooking"));
+
   if (!booking) {
+    console.log("No booking found, redirecting...");
     window.location.href = "venues.html";
     return;
   }
@@ -371,6 +392,7 @@ function initPaymentForm() {
   document.getElementById("summaryGuests").textContent = booking.guestCount;
   document.getElementById("summaryAmount").textContent = `₹${booking.totalAmount}`;
 }
+
 
 async function loadMyBookings(status = "all") {
   try {
