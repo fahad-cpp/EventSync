@@ -5,10 +5,22 @@ import mysql from "mysql2";
 import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcrypt";
+import mailer from "nodemailer";
 
 dotenv.config();
+
 const app = express();
 const __dirname = path.resolve();
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.APP_PASS,
+  },
+});
 
 // Middleware Setup
 app.use(express.json());
