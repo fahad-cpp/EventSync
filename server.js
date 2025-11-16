@@ -5,10 +5,10 @@ import mysql from "mysql2";
 import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcrypt";
-import mailer from "nodemailer";
+import nodemailer from "nodemailer";
 
 dotenv.config();
-
+const otpStore = new Map();
 const app = express();
 const __dirname = path.resolve();
 
@@ -21,6 +21,24 @@ const transporter = nodemailer.createTransport({
     pass: process.env.APP_PASS,
   },
 });
+
+
+async function sendMail(email,text = "",subject = "",html= "") {
+  const mailOptions = {
+    from: `"EventSync" ${process.env.EMAIL}`,
+    to: email,
+    subject: subject,
+    text: text,
+    html: html,
+  };
+
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    console.log("Email sent ✔️", result.messageId);
+  } catch (err) {
+    console.error("Error ❌", err);
+  }
+}
 
 // Middleware Setup
 app.use(express.json());
@@ -51,9 +69,9 @@ const con = mysql.createConnection({
 
 con.connect((err) => {
   if (err) {
-    console.error("❌ MySQL connection error:", err);
+    console.error("MySQL connection error:", err);
   } else {
-    console.log("✅ Connected to MySQL database");
+    console.log("Connected to MySQL database");
   }
 });
 
@@ -78,19 +96,92 @@ app.post("/api/auth/register", async (req, res) => {
       return res.json({ success: false, message: "Email is already registered." });
     }
 
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpire = Date.now() + 5 * 60 * 1000;
+
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    // Store user data temporarily
+    otpStore.set(email, {
+      otp,
+      otpExpire,
+      userData: {
+        username,
+        email,
+        hashedPassword,
+        fullName: fullName || username,
+        phone: phone || ""
+      }
+    });
+
+    // Send OTP email
+    await sendMail(
+      email,
+      "",
+      "Your EventSync OTP",
+      `<h3>Your OTP is <b>${otp}</b> (valid for 5 minutes)</h3>`
+    );
+
+    res.json({ success: true, message: "OTP sent to email." });
+
+  } catch (err) {
+    console.error("Registration error:", err);
+    res.status(500).json({ success: false, message: "Server error during registration." });
+  }
+});
+
+app.post("/api/auth/verify-otp", async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const entry = otpStore.get(email);
+    if (!entry) {
+      return res.json({ success: false, message: "OTP expired or not found." });
+    }
+
+    const { otp: storedOtp, otpExpire, userData } = entry;
+
+    if (Date.now() > otpExpire) {
+      otpStore.delete(email);
+      return res.json({ success: false, message: "OTP expired." });
+    }
+
+    if (otp !== storedOtp) {
+      return res.json({ success: false, message: "Invalid OTP." });
+    }
+
+    // OTP correct → create user now
     await con
       .promise()
       .query(
         "INSERT INTO users (username, email, password_hash, full_name, phone, role) VALUES (?, ?, ?, ?, ?, 'user')",
-        [username, email, hashedPassword, fullName || username, phone || ""]
+        [
+          userData.username,
+          userData.email,
+          userData.hashedPassword,
+          userData.fullName,
+          userData.phone
+        ]
       );
 
-    res.json({ success: true, message: "Registration successful! Please login." });
+    // Remove from temp store
+    otpStore.delete(email);
+    sendMail(userData.email,"","Your Email has been Verified.",`
+      <!DOCTYPE html>
+      <html>
+      <body style="font-family:Arial,sans-serif;">
+        <p><strong>Email Verified</strong></p>
+        <p>Your email has been successfully verified.</p>
+      </body>
+      </html>
+    `);
+    res.json({ success: true, message: "Email verified. Account created!" });
+
   } catch (err) {
-    console.error("Registration error:", err);
-    res.status(500).json({ success: false, message: "Server error during registration." });
+    console.error("OTP verify error:", err);
+    res.status(500).json({ success: false, message: "Server error during verification." });
   }
 });
 
@@ -457,16 +548,48 @@ app.put("/api/bookings/:id/confirm", async (req, res) => {
       return res.json({ success: false, message: "Booking not found." });
     }
 
+    const booking = bookings[0];
+
+    // Get user info
+    const [users] = await con
+      .promise()
+      .query("SELECT email, full_name FROM users WHERE user_id = ?", [booking.user_id]);
+
+    if (users.length === 0) {
+      return res.json({ success: false, message: "User not found for booking." });
+    }
+
+    const user = users[0];
+
+    // Update booking status
     await con
       .promise()
       .query("UPDATE bookings SET booking_status = 'confirmed' WHERE booking_id = ?", [req.params.id]);
 
-    res.json({ success: true, message: "Booking confirmed successfully." });
+    // ------------------------------------
+    // ✔ SEND CONFIRMATION EMAIL
+    // ------------------------------------
+    await sendMail(
+      user.email,
+      "",
+      "Your Booking Has Been Confirmed",
+      `
+        <h2>Hello ${user.full_name || "User"},</h2>
+        <p>Your booking (#${booking.booking_id}) has been <strong>confirmed</strong>.</p>
+        <p>You can now check the status of your booking on the EventSync dashboard.</p>
+        <br>
+        <p>Thank you,<br>EventSync Team</p>
+      `
+    );
+
+    res.json({ success: true, message: "Booking confirmed and email sent." });
+
   } catch (err) {
     console.error("Error confirming booking:", err);
     res.status(500).json({ success: false, message: "Error confirming booking." });
   }
 });
+
 
 // ═══════════════════════════════════════════════════════════
 // PAYMENT ROUTES

@@ -14,7 +14,6 @@
     <nav class="navbar">
       <div class="nav-container">
         <a href="index.html" class="nav-brand">
-          <!-- Changed emoji from ✨ to ⚡ -->
           <span class="brand-icon">⚡</span>
           <span class="brand-text">EventSync</span>
         </a>
@@ -92,6 +91,21 @@
         </div>
         <button type="submit" class="btn btn-primary" style="width: 100%;">Admin Login</button>
         <p id="adminMessage" class="message"></p>
+      </form>
+
+      <!-- OTP Verification Form -->
+      <form id="otpForm" class="form" style="display: none;">
+        <h2>Verify Email</h2>
+        <p style="font-size:14px;margin-bottom:10px;">Enter the OTP sent to your email.</p>
+
+        <div class="form-group">
+          <label for="otpInput">OTP</label>
+          <input type="text" id="otpInput" placeholder="6-digit OTP" maxlength="6" inputmode="numeric" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Verify OTP</button>
+
+        <p id="otpMessage" class="message"></p>
       </form>
     </div>
   </main>

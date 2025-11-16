@@ -50,22 +50,54 @@ async function handleRegister(e) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password, fullName, phone }),
     });
+
     const data = await res.json();
 
     if (data.success) {
-      showMessage("registerMessage", "Registration successful! Login to continue.", "success");
-      setTimeout(() => {
-        document.getElementById("registerForm").reset();
-        document.getElementById("loginTab").checked = true;
-        // Trigger form display update
-        const loginTab = document.getElementById("loginTab");
-        loginTab.dispatchEvent(new Event('change'));
-      }, 1000);
+      showMessage("registerMessage", "OTP sent to your email. Please verify.", "success");
+
+      // Switch UI to OTP screen
+      document.getElementById("registerForm").style.display = "none";
+      document.getElementById("otpForm").style.display = "block";
+      
+      // Store email globally for OTP verification
+      window.lastRegisteredEmail = email;
+
     } else {
       showMessage("registerMessage", data.message, "error");
     }
   } catch (err) {
     showMessage("registerMessage", "Server error", "error");
+  }
+}
+
+async function handleVerifyOTP(e) {
+  e.preventDefault();
+
+  const otp = document.getElementById("otpInput").value.trim();
+  const email = window.lastRegisteredEmail;
+
+  const res = await fetch("/api/auth/verify-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, otp }),
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    showMessage("otpMessage", "Email verified! You can now log in.", "success");
+
+    setTimeout(() => {
+      document.getElementById("otpForm").reset();
+      document.getElementById("otpForm").style.display = "none";
+
+      document.getElementById("loginTab").checked = true;
+      document.getElementById("loginTab").dispatchEvent(new Event('change'));
+    }, 800);
+
+  } else {
+    showMessage("otpMessage", data.message, "error");
   }
 }
 
@@ -272,8 +304,10 @@ async function handleBooking(e) {
         guestCount,
       };
 
+      console.log("proceeding to payment");
       setTimeout(() => (window.location.href = "booking-payment.html"), 1500);
     } else {
+      console.log("Error creating Booking")
       showMessage("bookingMessage", data.message, "error");
     }
   } catch (err) {
@@ -987,11 +1021,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateNav();
 
-  if (currentPage === "auth.html") {
+  if (currentPage === "auth.html"){
     setupAuthTabs();
     document.getElementById("loginForm")?.addEventListener("submit", handleLogin);
     document.getElementById("registerForm")?.addEventListener("submit", handleRegister);
     document.getElementById("adminForm")?.addEventListener("submit", handleAdminLogin);
+    document.getElementById("otpForm").addEventListener("submit", handleVerifyOTP);
   }
 
   if (currentPage === "dashboard.html") {
