@@ -22,24 +22,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-
-async function sendMail(email,text = "",subject = "",html= "") {
-  const mailOptions = {
-    from: `"EventSync" ${process.env.EMAIL}`,
-    to: email,
-    subject: subject,
-    text: text,
-    html: html,
-  };
-
-  try {
-    const result = await transporter.sendMail(mailOptions);
-    console.log("Email sent ✔️", result.messageId);
-  } catch (err) {
-    console.error("Error ❌", err);
-  }
-}
-
 // Middleware Setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -74,7 +56,40 @@ con.connect((err) => {
     console.log("Connected to MySQL database");
   }
 });
+//Email specific helpers
+async function sendMail(email,text = "",subject = "",html= "") {
+  const mailOptions = {
+    from: `"EventSync" ${process.env.EMAIL}`,
+    to: email,
+    subject: subject,
+    text: text,
+    html: html,
+  };
 
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    console.log("Email sent ✔️", result.messageId);
+  } catch (err) {
+    console.error("Error ❌", err);
+  }
+}
+async function sendBookingConfirmedEmail(user,booking){
+  if(!user.full_name){
+    console.log(user);
+  }
+  await sendMail(
+      user.email,
+      "",
+      "Your Booking Has Been Confirmed",
+      `
+        <h2>Hello ${user.full_name || "User"},</h2>
+        <p>Your booking (#${booking.booking_id}) has been <strong>confirmed</strong>.</p>
+        <p>You can now check the status of your booking on the EventSync dashboard.</p>
+        <br>
+        <p>Thank you,<br>EventSync Team</p>
+      `
+    );
+}
 // ═══════════════════════════════════════════════════════════
 // AUTH ROUTES
 // ═══════════════════════════════════════════════════════════
@@ -196,7 +211,7 @@ app.post("/api/auth/login", async (req, res) => {
 
     const [rows] = await con
       .promise()
-      .query("SELECT user_id, email, password_hash, role, username FROM users WHERE email = ?", [email]);
+      .query("SELECT user_id, email, password_hash, role, username,full_name FROM users WHERE email = ?", [email]);
 
     if (rows.length === 0) {
       return res.json({ success: false, message: "Email not registered." });
@@ -214,6 +229,7 @@ app.post("/api/auth/login", async (req, res) => {
       email: user.email,
       username: user.username,
       role: user.role,
+      full_name: user.full_name,
       loggedIn: true,
     };
 
@@ -569,18 +585,7 @@ app.put("/api/bookings/:id/confirm", async (req, res) => {
     // ------------------------------------
     // ✔ SEND CONFIRMATION EMAIL
     // ------------------------------------
-    await sendMail(
-      user.email,
-      "",
-      "Your Booking Has Been Confirmed",
-      `
-        <h2>Hello ${user.full_name || "User"},</h2>
-        <p>Your booking (#${booking.booking_id}) has been <strong>confirmed</strong>.</p>
-        <p>You can now check the status of your booking on the EventSync dashboard.</p>
-        <br>
-        <p>Thank you,<br>EventSync Team</p>
-      `
-    );
+    sendBookingConfirmedEmail(user,booking);
 
     res.json({ success: true, message: "Booking confirmed and email sent." });
 
@@ -632,6 +637,7 @@ app.post("/api/payments/create", async (req, res) => {
       .promise()
       .query("UPDATE bookings SET booking_status = 'confirmed' WHERE booking_id = ?", [bookingId]);
 
+    sendBookingConfirmedEmail(req.session.user,booking);
     res.json({ success: true, message: "Payment successful. Booking confirmed." });
   } catch (err) {
     console.error("Error creating payment:", err);
