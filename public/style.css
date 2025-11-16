@@ -720,6 +720,42 @@ html {
   cursor: pointer;
 }
 
+/* Container */
+.booking-status-filter.search-filter {
+  display: flex;
+  gap: var(--spacing-md, 0.75rem);
+  margin-bottom: var(--spacing-lg, 1.25rem);
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.booking-status-filter.search-filter .filter-btn {
+  padding: 0.6rem 1.2rem;
+  background-color: var(--surface-light);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius, 8px);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-weight: 500;
+}
+
+/* Hover */
+.booking-status-filter.search-filter .filter-btn:hover {
+  background-color: var(--surface-lighter);
+  color: var(--text-primary);
+  border-color: var(--accent);
+}
+
+/* Active state */
+.booking-status-filter.search-filter .filter-btn.active {
+  background-color: var(--accent);
+  border-color: var(--accent-bright);
+  color: #000;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.25);
+}
 /* Event/Venue List */
 .event-list {
   display: grid;
@@ -1036,7 +1072,137 @@ html {
   margin-bottom: var(--spacing-xl);
 }
 
-/* .admin-card {
+.admin-card{
   background-color: var(--surface);
   border: 1px solid var(--border);
-} */
+  border-radius: var(--radius);
+  margin: var(--spacing-lg);
+  padding: var(--spacing-lg);
+}
+
+.table-responsive {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius, 8px);
+  margin: var(--spacing-lg, 1rem);
+  padding: var(--spacing-lg, 1rem);
+  overflow-x: auto;
+}
+/************ Table Stylings **************/
+.table-responsive table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+/* Table header */
+.table-responsive thead th {
+  background-color: var(--surface-light);
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid var(--border-light);
+}
+
+/* Body cells */
+.table-responsive tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
+}
+
+/* Zebra stripes */
+.table-responsive tbody tr:nth-child(even) {
+  background-color: var(--surface-lighter);
+}
+
+/* Hover row */
+.table-responsive tbody tr:hover {
+  background-color: var(--surface-light);
+}
+
+/* Add subtle accent highlight to hover (optional) */
+.table-responsive tbody tr:hover td {
+  color: var(--text-primary);
+}
+
+/* Rounded corners maintained */
+.table-responsive table {
+  border-radius: var(--radius, 8px);
+  overflow: hidden;
+}
+/* --- GRID WRAPPER --- */
+.venue-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg, 1.5rem);
+  background-color: var(--surface);
+  padding: var(--spacing-lg, 1.5rem);
+  border-radius: var(--radius, 12px);
+  border: 1px solid var(--border);
+  margin-bottom: var(--spacing-lg, 2rem);
+}
+
+/* --- INFO SECTIONS --- */
+.info-section {
+  background-color: var(--surface-light);
+  padding: var(--spacing-md, 1rem);
+  border-radius: var(--radius, 10px);
+  border: 1px solid var(--border-light);
+  transition: background 0.3s ease;
+}
+
+.info-section:hover {
+  background-color: var(--surface-lighter);
+}
+
+/* --- HEADERS --- */
+.info-section h3,
+.description-section h3 {
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* --- PARAGRAPHS --- */
+.info-section p,
+.description-section p {
+  margin: 0.4rem 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Bold labels */
+.info-section p strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Dynamic values */
+.info-section p span {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* --- DESCRIPTION BLOCK --- */
+.description-section {
+  background-color: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius, 12px);
+  padding: var(--spacing-lg, 1.5rem);
+}
+
+.description-section p {
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+/* Hover effect */
+.description-section:hover {
+  background-color: var(--surface-light);
+}

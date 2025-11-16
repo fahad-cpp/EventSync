@@ -671,6 +671,7 @@ async function editVenue(venueId) {
     document.getElementById("venueImage").value = "";
 
     document.getElementById("venueFormContainer").style.display = "block";
+    window.scrollTo(0, 0);
   } catch (err) {
     alert("Error loading venue");
   }
@@ -957,8 +958,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function updateNav() {
     const navActions = document.getElementById("navActions");
-    if (!navActions) return;
-
+    const navLinks = document.getElementById("navLinks");
+    if (!navActions || !navLinks) return;
     try {
       const res = await fetch("/api/auth/status", {
         credentials: "include",
@@ -967,11 +968,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (data.loggedIn) {
         navActions.innerHTML = `
-          <a href="dashboard.html" class="nav-link">Dashboard</a>
-          <a href="venues.html" class="nav-link">Venues</a>
           <a href="profile.html" class="btn btn-secondary">Profile</a>
           <button id="logoutBtn" class="btn btn-outline">Logout</button>
         `;
+        navLinks.innerHTML = `
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="venues.html" class="nav-link">Venues</a>
+        `
         const logoutBtn = document.getElementById("logoutBtn");
         if (logoutBtn) {
           logoutBtn.addEventListener("click", handleLogout);

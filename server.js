@@ -618,7 +618,7 @@ app.get("/api/admin/reports", async (req, res) => {
     const [totalUsers] = await con.promise().query("SELECT COUNT(*) as count FROM users WHERE role = 'user'");
     const [totalBookings] = await con.promise().query("SELECT COUNT(*) as count FROM bookings");
     const [confirmedBookings] = await con.promise().query("SELECT COUNT(*) as count FROM bookings WHERE booking_status = 'confirmed'");
-    const [totalRevenue] = await con.promise().query("SELECT SUM(amount) as total FROM payments WHERE payment_status = 'completed'");
+    const [totalRevenue] = await con.promise().query("SELECT SUM(total_amount) as total FROM bookings WHERE booking_status = 'confirmed'");
 
     res.json({
       success: true,
